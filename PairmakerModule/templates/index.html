@@ -1,0 +1,15 @@
+{% extends 'base.html' -%}
+
+{% block head -%}
+{{ super() }}
+{% endblock head -%}
+
+{% block content -%}
+    {% for cat, msg in get_flashed_messages(True) -%}
+    <div class="alert {{ cat }} alert-dismissible fade show" role="alert"> {{ msg }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+    {% endfor -%}
+
+
+
+{% endblock content -%}
