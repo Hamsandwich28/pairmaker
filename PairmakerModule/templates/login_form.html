@@ -1,0 +1,6 @@
+<form action="{{ url_for('login') }}" method="post">
+    {{ lform.hidden_tag() }}
+    <div class="m-3">{{ lform.login_login.label(class="form-label") }} {{ lform.login_login }}</div>
+    <div class="m-3">{{ lform.login_pass.label(class="form-label") }} {{ lform.login_pass }}</div>
+    <div class="m-3 ">{{ lform.login_submit() }}</div>
+</form>
