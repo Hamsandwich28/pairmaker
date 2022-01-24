@@ -126,14 +126,36 @@ def logout():
 
 @app.route('/quest')
 def quest():
-    return render_template('quest.html',
-                           title='Вопросы')
+    # Check marked questions
+    return redirect(url_for('quest_block_1'))
 
 
-@app.route('/quest_answer', methods=['POST'])
-def quest_answer():
-    # Set question answer
-    return jsonify({'set': True})
+@app.route('/quest-block-1', methods=['GET', 'POST'])
+def quest_block_1():
+    if request.method == 'POST':
+        answers = dict(request.form)
+        dbase.paste_answers_from_dict(answers, current_user.get_id())
+        return redirect(url_for('quest_block_2'))
+    return render_template('quest-block-1.html',
+                           title='Блок вопросов')
+
+
+@app.route('/quest-block-2', methods=['GET', 'POST'])
+def quest_block_2():
+    if request.method == 'POST':
+        # DB answers paste
+        return redirect(url_for('quest_block_3'))
+    return render_template('quest-block-2.html',
+                           title='Блок вопросов')
+
+
+@app.route('/quest-block-3', methods=['GET', 'POST'])
+def quest_block_3():
+    if request.method == 'POST':
+        # DB answers paste
+        return redirect(url_for(''))
+    return render_template('quest-block-3.html',
+                           title='Блок вопросов')
 
 
 if __name__ == '__main__':

@@ -12,8 +12,8 @@
 </div>
 {% endfor -%}
 
-<div class="form mx-auto mt-4 mb-1">
-    <p class="h5 text-center">Регистрация</p><hr>
+<div class="form-500w mx-auto mt-4 mb-1">
+    <p class="h4 text-center">Регистрация</p><hr>
     {% include 'register_form.html' -%}
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -35,5 +35,4 @@
     </button>
 </div>
 
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock content -%}
