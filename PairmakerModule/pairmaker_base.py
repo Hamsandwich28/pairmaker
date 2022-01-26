@@ -9,7 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from pairmaker_user import User
 from pairmaker_database import Database
-from pairmaker_forms import Registerform, Loginform
 
 # config
 app = Flask(__name__)
@@ -61,67 +60,55 @@ def close_db(error):
         g.link_db.close()
 
 
-@app.route('/')
-def index():
-    register_form = Registerform()
-    login_form = Loginform()
-
-    if current_user.is_authenticated:
-        return redirect(url_for('quest'))
-
-    return render_template('index.html',
-                           title='Начало',
-                           rform=register_form,
-                           lform=login_form)
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    login_form = Loginform()
-    if login_form.validate_on_submit():
-        login = login_form.login_login.data
-        password = login_form.login_pass.data
-        userdata = User.userify(dbase.get_user_by_login(login))
-        if userdata and check_password_hash(userdata['phash'], password):
-            userlogin = User().create(userdata)
-            login_user(userlogin)
-            return redirect(url_for('quest'))
-        else:
-            flash('Логин или пароль неверны', category='alert-warning')
-    else:
-        flash('Авторизация не удалась', category='alert-warning')
-
-    return redirect(url_for('index'))
-
-
-@app.route('/register', methods=['POST'])
-def register():
-    register_form = Registerform()
-    if register_form.validate_on_submit():
-        fname = register_form.register_fname.data
-        lname = register_form.register_lname.data
-        login = register_form.register_login.data
-        password = register_form.register_pass.data
-
-        if dbase.register_new_user(fname, lname, login,
-                                   generate_password_hash(password)):
-            userdata = User.userify(dbase.get_user_by_login(login))
-            userlogin = User().create(userdata)
-            login_user(userlogin)
-            return redirect(url_for('quest'))
-        else:
-            flash('Данный логин уже зарегистрирован', category='alert-warning')
-    else:
-        flash('Регистрация не удалась', category='alert-warning')
-    return redirect(url_for('index'))
-
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Вы успешно вышли из аккаунта', category='alert-success')
     return redirect(url_for('index'))
+
+
+@app.route('/')
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('quest'))
+
+    return render_template('index.html',
+                           title='Начало')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    login = request.form.get('login')
+    password = request.form.get('password')
+    userdata = User.userify(dbase.select_user_by_login(login))
+    if userdata and check_password_hash(userdata['passhash'], password):
+        userlogin = User().create(userdata)
+        login_user(userlogin)
+        return redirect(url_for('quest'))
+    else:
+        flash('Логин или пароль неверны', category='alert-warning')
+
+    return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    firstname = request.form.get('firstname')
+    login = request.form.get('login')
+    password = request.form.get('password')
+    if len(fname) < 2 or len(login) < 6 or len(password) < 6:
+        flash('Некорректные данные полей', category='alert-warning')
+        return redirect(url_for('index'))
+
+    if dbase.insert_new_user(firstname, login, generate_password_hash(password)):
+        userdata = User.userify(dbase.select_user_by_login(login))
+        userlogin = User().create(userdata)
+        login_user(userlogin)
+        return redirect(url_for('quest'))
+    else:
+        flash('Данный логин уже зарегистрирован', category='alert-warning')
+        return redirect(url_for('index'))
 
 
 @app.route('/quest')
@@ -133,8 +120,14 @@ def quest():
 @app.route('/quest-block-1', methods=['GET', 'POST'])
 def quest_block_1():
     if request.method == 'POST':
-        answers = dict(request.form)
-        dbase.paste_answers_from_dict(answers, current_user.get_id())
+        answers_paste = {
+            'ismale': request.form.get('ismale'),
+            'age': request.form.get('age'),
+            'growth': request.form.get('growth')
+        }
+        dbase.update_table_from_dict_by_user_id(
+            current_user.get_id(), 'form', answers_paste
+        )
         return redirect(url_for('quest_block_2'))
     return render_template('quest-block-1.html',
                            title='Блок вопросов')
@@ -149,11 +142,45 @@ def quest_block_2():
                            title='Блок вопросов')
 
 
+def _key_values_dict(obj, basename):
+    result = {
+        basename + str(1): None,
+        basename + str(2): None
+    }
+    posted = 0
+    for row in obj:
+        if row:
+            result[basename + str(posted + 1)] = row
+            posted += 1
+        if posted == 2:
+            break
+    return result
+
+
 @app.route('/quest-block-3', methods=['GET', 'POST'])
 def quest_block_3():
     if request.method == 'POST':
-        # DB answers paste
-        return redirect(url_for(''))
+        movie = [
+            request.form.get('movieattitude0') or None,
+            request.form.get('movieattitude1') or None,
+            request.form.get('movieattitude2') or None,
+            request.form.get('movieattitude3') or None
+        ]
+        lit = [
+            request.form.get('litattitude0') or None,
+            request.form.get('litattitude1') or None,
+            request.form.get('litattitude2') or None,
+            request.form.get('litattitude3') or None,
+        ]
+        answers_paste = {
+            'sportattitude': request.form.get('sportattitude'),
+        }
+        answers_paste.update(_key_values_dict(movie, 'movieattitude'))
+        answers_paste.update(_key_values_dict(lit, 'litattitude'))
+        dbase.update_table_from_dict_by_user_id(
+            current_user.get_id(), 'form', answers_paste
+        )
+        # return redirect(url_for(''))
     return render_template('quest-block-3.html',
                            title='Блок вопросов')
 

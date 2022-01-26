@@ -1,38 +1,16 @@
 {% extends 'base.html' -%}
 
-{% block head -%}
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock head -%}
-
 {% block content -%}
-{% for cat, msg in get_flashed_messages(True) -%}
-<div class="alert {{ cat }} alert-dismissible fade show central-div-500" role="alert"> {{ msg }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor -%}
+{% include 'flash.html' %}
 
-<div class="form-500w mx-auto mt-4 mb-1">
-    <p class="h4 text-center">Регистрация</p><hr>
-    {% include 'register_form.html' -%}
+<div>
+    <p>Регистрация</p>
+    {% include 'form-register.html' -%}
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Авторизоваться</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% include 'login_form.html' -%}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="central-div-200">
-    <button type="button" class="button-as-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Авторизоваться на сайте
-    </button>
+
+<div>
+    <p>Авторизация</p>
+    {% include 'form-login.html' -%}
 </div>
 
 {% endblock content -%}

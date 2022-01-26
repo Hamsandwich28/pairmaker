@@ -1,24 +1,11 @@
 {% extends 'base.html' -%}
 
-{% block head -%}
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock head -%}
-
 {% block content -%}
-{% for cat, msg in get_flashed_messages(True) -%}
-    <div class="alert {{ cat }} alert-dismissible fade show central-div-500" role="alert"> {{ msg }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endfor -%}
+{% include 'flash.html' %}
 
     <a href="{{ url_for('logout') }}">Выйти из профиля</a>
-    <div class="form-500w mx-auto mt-4 fs-5">
-        <p class="fs-3 fw-bold text-center">Заполни анкету</p><hr>
-        <form action="{{ url_for('quest_block_2') }}" method="post">
-            <div class="mt-3 mx-auto">
-                <input class="btn btn-success" type="submit" value="Продолжить">
-            </div>
-        </form>
+    <div>
+        {% include 'form-quest-block-2.html' %}
     </div>
+
 {% endblock content -%}

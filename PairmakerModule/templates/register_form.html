@@ -1,8 +1,0 @@
-<form action="{{ url_for('register') }}" method="post">
-    {{ rform.hidden_tag() }}
-    <div class="m-3">{{ rform.register_fname.label(class="form-label") }} {{ rform.register_fname }}</div>
-    <div class="m-3">{{ rform.register_lname.label(class="form-label") }} {{ rform.register_lname }}</div>
-    <div class="m-3">{{ rform.register_login.label(class="form-label") }} {{ rform.register_login }}</div>
-    <div class="m-3">{{ rform.register_pass.label(class="form-label") }} {{ rform.register_pass }}</div>
-    <div class="m-3">{{ rform.register_submit() }}</div>
-</form>

@@ -1,4 +1,5 @@
 import psycopg2
+from typing import Optional
 
 
 class Database:
@@ -13,17 +14,27 @@ class Database:
         self.__db = db
         self.__cur = db.cursor()
 
-    def register_new_user(self, fname, lname, login, phash):
-        try:
-            sql = f"""INSERT INTO users (firstname, lastname, login, phash)
-                      VALUES(%s, %s, %s, %s)
-                      RETURNING id;"""
-            self.__cur.execute(sql, (fname, lname, login, phash))
-            new_user_id = self.__cur.fetchone()
+    def _insert_empty_to_form_table(self, user_id: int) -> None:
+        """Установка записи ответов - изначально с пустыми полями"""
+        sql = f"INSERT INTO form(user_id) VALUES(%s);"
+        self.__cur.execute(sql, user_id)
 
-            sql = f"""INSERT INTO question_table (userId)
-                      VALUES(%s);"""
-            self.__cur.execute(sql, new_user_id)
+    def _insert_empty_to_identikit_table(self, user_id: int) -> None:
+        """Установка записи ответов - изначально с пустыми полями"""
+        sql = f"INSERT INTO identikit(user_id) VALUES(%s);"
+        self.__cur.execute(sql, user_id)
+
+    def insert_new_user(self, firstname: str, login: str, passhash: str) -> bool:
+        """Запрос на вставку новой записи пользователя"""
+        try:
+            sql = """
+            INSERT INTO users (firstname, login, passhash)
+            VALUES(%s, %s, %s)
+            RETURNING id;"""
+            self.__cur.execute(sql, (firstname, login, passhash))
+            new_user_id = self.__cur.fetchone()
+            self._insert_empty_to_form_table(new_user_id)
+            self._insert_empty_to_identikit_table(new_user_id)
             self.__db.commit()
             return True
 
@@ -32,11 +43,10 @@ class Database:
             print('Ошибка добавления пользователя -> ', e)
         return False
 
-    def get_user_by_login(self, login):
+    def select_user_by_id(self, user_id: int) -> Optional[tuple]:
+        """Выборка записи пользователя по id"""
         try:
-            sql = f"""SELECT *
-                      FROM users
-                      WHERE login = '{login}';"""
+            sql = f"SELECT * FROM users WHERE id = {user_id};"
             self.__cur.execute(sql)
             res = self.__cur.fetchone()
             if res:
@@ -46,29 +56,33 @@ class Database:
             print('Ошибка чтения пользователя -> ', e)
         return None
 
-    def get_user_by_id(self, user_id):
+    def select_user_by_login(self, user_login: str) -> Optional[tuple]:
+        """Выборка записи пользователя по логину"""
         try:
-            sql = f"""SELECT *
-                      FROM users
-                      WHERE id = {user_id};"""
+            sql = f"SELECT * FROM users WHERE login = '{user_login}';"
             self.__cur.execute(sql)
-            res = self.__cur.fetchone() or None
-            return res
+            res = self.__cur.fetchone()
+            if res:
+                return res
 
         except psycopg2.Error as e:
             print('Ошибка чтения пользователя -> ', e)
+        return None
 
-    def paste_answers_from_dict(self, answers: dict, user_id):
-        set_str = ', '.join([f'{k} = {int(v)}' for k, v in answers.items()])
+    def update_table_from_dict_by_user_id(self,
+                                          user_id: int,
+                                          table: str,
+                                          answers: dict) -> bool:
+        """Обновление записи указанной таблицы по id пользователя """
+        set_str = ', '.join([f'{k} = {int(v) if v else "NULL"}'
+                             for k, v in answers.items()])
         try:
-            sql = f"""UPDATE question_table
-                      SET {set_str}
-                      WHERE userId = {user_id};"""
+            sql = f"""UPDATE {table} SET {set_str} WHERE user_id = {user_id};"""
             self.__cur.execute(sql)
             self.__db.commit()
             return True
 
         except psycopg2.Error as e:
             self.__db.rollback()
-            print('Ошибка установки ответов пользователя -> ', e)
-
+            print(f'Ошибка установки записи таблицы {table} -> ', e)
+        return False

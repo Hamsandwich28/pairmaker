@@ -1,0 +1,98 @@
+<form action="{{ url_for('quest_block_3') }}" method="post">
+
+    <div class="quest-block">
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude2" value="2" required>
+            <label class="form-check-label" for="sportattitude2">
+                Очень хорошо, регулярно занимаюсь
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude1" value="1">
+            <label class="form-check-label" for="sportattitude1">
+                Больше болельщик, чем спортсмен 
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude0" value="0">
+            <label class="form-check-label" for="sportattitude0">
+                Ни то, ни другое 
+            </label>
+        </div>
+    </div><hr>
+
+    <div class="quest-block">
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="movieattitude0" id="movieattitude0" value="0"
+            onclick="selectMovieHandle(this);">
+            <label class="form-check-label" for="movieattitude0">
+                Жанр фильма
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="movieattitude1" id="movieattitude1" value="1"
+            onclick="selectMovieHandle(this);">
+            <label class="form-check-label" for="movieattitude1">
+                Жанр фильма
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="movieattitude2" id="movieattitude2" value="2"
+            onclick="selectMovieHandle(this);">
+            <label class="form-check-label" for="movieattitude2">
+                Жанр фильма
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="movieattitude3" id="movieattitude3" value="3"
+            onclick="selectMovieHandle(this);">
+            <label class="form-check-label" for="movieattitude3">
+                Жанр фильма
+            </label>
+        </div>
+    </div><hr>
+
+    <div class="quest-block">
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="litattitude0" id="litattitude0" value="0"
+            onclick="selectLitHandle(this);">
+            <label class="form-check-label" for="litattitude0">
+                Жанр литературы
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="litattitude1" id="litattitude1" value="1"
+            onclick="selectLitHandle(this);">
+            <label class="form-check-label" for="litattitude1">
+                Жанр литературы
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="litattitude2" id="litattitude2" value="2"
+            onclick="selectLitHandle(this);">
+            <label class="form-check-label" for="litattitude2">
+                Жанр литературы
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="litattitude3" id="litattitude3" value="3"
+            onclick="selectLitHandle(this);">
+            <label class="form-check-label" for="litattitude3">
+                Жанр литературы
+            </label>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-primary">
+</form>
