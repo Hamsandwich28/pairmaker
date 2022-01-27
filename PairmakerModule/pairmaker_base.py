@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from pairmaker_user import User
 from pairmaker_database import Database
+from pairmaker_handler import _key_values_dict, _check_img_format, \
+    _check_link_format
 
 # config
 app = Flask(__name__)
@@ -97,7 +99,7 @@ def register():
     firstname = request.form.get('firstname')
     login = request.form.get('login')
     password = request.form.get('password')
-    if len(fname) < 2 or len(login) < 6 or len(password) < 6:
+    if len(firstname) < 2 or len(login) < 6 or len(password) < 6:
         flash('Некорректные данные полей', category='alert-warning')
         return redirect(url_for('index'))
 
@@ -113,8 +115,19 @@ def register():
 
 @app.route('/quest')
 def quest():
-    # Check marked questions
-    return redirect(url_for('quest_block_1'))
+    check_form = dbase.select_answers_form_blocks(current_user.get_id())
+    # check_block2 = dbase.select_user_idenikit(current_user.get_id())
+    # check_info = dbase.select_user_info(current_user.get_id())
+    block1, block3 = check_form[:3], check_form[3:]
+    if None in block1:
+        return redirect(url_for('quest_block_1'))
+    # elif None in check_block2:
+    #     return redirect(url_for('quest_block_2'))
+    elif None in block3:
+        return redirect(url_for('quest_block_3'))
+    # elif None in check_info:
+    #     return redirect(url_for('personal_info'))
+    return redirect(url_for('main_page'))
 
 
 @app.route('/quest-block-1', methods=['GET', 'POST'])
@@ -142,47 +155,64 @@ def quest_block_2():
                            title='Блок вопросов')
 
 
-def _key_values_dict(obj, basename):
-    result = {
-        basename + str(1): None,
-        basename + str(2): None
-    }
-    posted = 0
-    for row in obj:
-        if row:
-            result[basename + str(posted + 1)] = row
-            posted += 1
-        if posted == 2:
-            break
-    return result
-
-
 @app.route('/quest-block-3', methods=['GET', 'POST'])
 def quest_block_3():
     if request.method == 'POST':
         movie = [
-            request.form.get('movieattitude0') or None,
-            request.form.get('movieattitude1') or None,
-            request.form.get('movieattitude2') or None,
-            request.form.get('movieattitude3') or None
+            request.form.get(k)
+            for k in request.form.keys()
+            if "movieattitude" in k
         ]
         lit = [
-            request.form.get('litattitude0') or None,
-            request.form.get('litattitude1') or None,
-            request.form.get('litattitude2') or None,
-            request.form.get('litattitude3') or None,
+            request.form.get(k)
+            for k in request.form.keys()
+            if "litattitude" in k
         ]
+        if not any(movie) or not any(lit):
+            flash('Ответьте на каждый вопрос', category='alert-warning')
+            return render_template('quest-block-3.html',
+                                   title='Блок вопросов')
         answers_paste = {
             'sportattitude': request.form.get('sportattitude'),
         }
-        answers_paste.update(_key_values_dict(movie, 'movieattitude'))
-        answers_paste.update(_key_values_dict(lit, 'litattitude'))
+        answers_paste.update(_key_values_dict(movie, 'movieattitude', 2))
+        answers_paste.update(_key_values_dict(lit, 'litattitude', 2))
         dbase.update_table_from_dict_by_user_id(
             current_user.get_id(), 'form', answers_paste
         )
-        # return redirect(url_for(''))
+        return redirect(url_for('personal_info'))
     return render_template('quest-block-3.html',
                            title='Блок вопросов')
+
+
+@app.route('/personal-info')
+def personal_info():
+    return render_template('personal-info.html')
+
+
+@app.route('/personal-info', methods=['POST'])
+def personal_info_upload():
+    file = request.files.get('file')
+    link = request.form.get('link')
+    if file and _check_img_format(file.filename) and _check_link_format(link):
+        try:
+            image = file.read()
+            if not dbase.update_user_avatar_and_link(current_user.get_id(), image, link):
+                flash('Изображение не удалось загрузить', category='alert-warning')
+                return redirect(url_for('personal_info'))
+        except FileNotFoundError:
+            flash('Изображение не найдено', category='alert-warning')
+            return redirect(url_for('personal_info'))
+    else:
+        flash('Некорректные данные (фото в png формате должно быть)', category='alert-warning')
+        return redirect(url_for('personal_info'))
+
+    return redirect(url_for('main_page'))
+
+
+@app.route('/main-page')
+def main_page():
+    return render_template('main-page.html')
 
 
 if __name__ == '__main__':

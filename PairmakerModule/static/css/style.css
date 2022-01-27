@@ -1,0 +1,16 @@
+.usual-form {
+    width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.identikit-form {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.form-colored {
+    background-color: lightpink;
+    border-radius: 10px;
+}

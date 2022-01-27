@@ -86,3 +86,40 @@ class Database:
             self.__db.rollback()
             print(f'Ошибка установки записи таблицы {table} -> ', e)
         return False
+
+    def select_answers_form_blocks(self, user_id: int) -> Optional[tuple]:
+        try:
+            sql = f"""
+            SELECT 
+            ismale, age, growth,
+            sportattitude, movieattitude1, movieattitude2,
+            litattitude1, litattitude2, hobbi1, hobbi2
+            FROM form
+            WHERE user_id = {user_id};"""
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            return res
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей ответов -> ', e)
+        return None
+
+    def update_user_avatar_and_link(self, user_id: int, image, link) -> bool:
+        if not image:
+            return False
+        binary = psycopg2.Binary(image)
+        try:
+            sql = """
+            UPDATE users SET 
+            avatar = %s,
+            social = %s
+            WHERE id = %s;
+            """
+            self.__cur.execute(sql, (binary, link, user_id))
+            self.__db.commit()
+            return True
+
+        except psycopg2.Error as e:
+            self.__db.rollback()
+            print('Ошибка чтения записей ответов -> ', e)
+        return False
