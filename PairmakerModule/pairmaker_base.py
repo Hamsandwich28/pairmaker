@@ -1,8 +1,9 @@
 import os
 import configparser
+
 import psycopg2
 from flask import Flask, render_template, redirect, url_for, \
-    flash, jsonify, request, g
+    flash, jsonify, request, g, Request
 from flask_login import LoginManager, login_user, login_required, \
     logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,7 +11,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from pairmaker_user import User
 from pairmaker_database import Database
 from pairmaker_handler import _key_values_dict, _check_img_format, \
-    _check_link_format
+    _request_form_getter, _check_link_format, _request_identikit_parser, \
+    amount
 
 # config
 app = Flask(__name__)
@@ -73,7 +75,7 @@ def logout():
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for('quest'))
+        return redirect(url_for('quest_block_1'))
 
     return render_template('index.html',
                            title='Начало')
@@ -87,7 +89,7 @@ def login():
     if userdata and check_password_hash(userdata['passhash'], password):
         userlogin = User().create(userdata)
         login_user(userlogin)
-        return redirect(url_for('quest'))
+        return redirect(url_for('quest_block_1'))
     else:
         flash('Логин или пароль неверны', category='alert-warning')
 
@@ -107,27 +109,10 @@ def register():
         userdata = User.userify(dbase.select_user_by_login(login))
         userlogin = User().create(userdata)
         login_user(userlogin)
-        return redirect(url_for('quest'))
+        return redirect(url_for('quest_block_1'))
     else:
         flash('Данный логин уже зарегистрирован', category='alert-warning')
         return redirect(url_for('index'))
-
-
-@app.route('/quest')
-def quest():
-    check_form = dbase.select_answers_form_blocks(current_user.get_id())
-    # check_block2 = dbase.select_user_idenikit(current_user.get_id())
-    # check_info = dbase.select_user_info(current_user.get_id())
-    block1, block3 = check_form[:3], check_form[3:]
-    if None in block1:
-        return redirect(url_for('quest_block_1'))
-    # elif None in check_block2:
-    #     return redirect(url_for('quest_block_2'))
-    elif None in block3:
-        return redirect(url_for('quest_block_3'))
-    # elif None in check_info:
-    #     return redirect(url_for('personal_info'))
-    return redirect(url_for('main_page'))
 
 
 @app.route('/quest-block-1', methods=['GET', 'POST'])
@@ -139,7 +124,7 @@ def quest_block_1():
             'growth': request.form.get('growth')
         }
         dbase.update_table_from_dict_by_user_id(
-            current_user.get_id(), 'form', answers_paste
+            current_user.get_id(), 'users', answers_paste
         )
         return redirect(url_for('quest_block_2'))
     return render_template('quest-block-1.html',
@@ -149,26 +134,27 @@ def quest_block_1():
 @app.route('/quest-block-2', methods=['GET', 'POST'])
 def quest_block_2():
     if request.method == 'POST':
-        # DB answers paste
+        kit = _request_identikit_parser(request)
+        print(kit)
+        dbase.update_table_from_dict_by_user_id(current_user.get_id(), 'identikit', kit)
         return redirect(url_for('quest_block_3'))
+    ismale = dbase.select_user_is_male(current_user.get_id())
+    if ismale is None:
+        return redirect(url_for('quest_block_1'))
+
     return render_template('quest-block-2.html',
-                           title='Блок вопросов')
+                           title='Блок вопросов',
+                           ismale='m' if ismale else 'f',
+                           amount=amount)
 
 
 @app.route('/quest-block-3', methods=['GET', 'POST'])
 def quest_block_3():
     if request.method == 'POST':
-        movie = [
-            request.form.get(k)
-            for k in request.form.keys()
-            if "movieattitude" in k
-        ]
-        lit = [
-            request.form.get(k)
-            for k in request.form.keys()
-            if "litattitude" in k
-        ]
-        if not any(movie) or not any(lit):
+        movie = _request_form_getter(request, 'movieattitude')
+        lit = _request_form_getter(request, 'litattitude')
+        hobby = _request_form_getter(request, 'hobby')
+        if not any(movie) or not any(lit) or not any(hobby):
             flash('Ответьте на каждый вопрос', category='alert-warning')
             return render_template('quest-block-3.html',
                                    title='Блок вопросов')
@@ -177,6 +163,7 @@ def quest_block_3():
         }
         answers_paste.update(_key_values_dict(movie, 'movieattitude', 2))
         answers_paste.update(_key_values_dict(lit, 'litattitude', 2))
+        answers_paste.update(_key_values_dict(hobby, 'hobby', 2))
         dbase.update_table_from_dict_by_user_id(
             current_user.get_id(), 'form', answers_paste
         )
@@ -204,7 +191,7 @@ def personal_info_upload():
             flash('Изображение не найдено', category='alert-warning')
             return redirect(url_for('personal_info'))
     else:
-        flash('Некорректные данные (фото в png формате должно быть)', category='alert-warning')
+        flash('Некорректные данные, повторите ввод', category='alert-warning')
         return redirect(url_for('personal_info'))
 
     return redirect(url_for('main_page'))

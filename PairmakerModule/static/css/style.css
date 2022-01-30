@@ -1,6 +1,16 @@
+ul {
+    list-style: none;
+}
+
+.flash {
+    width: 500px;
+    margin: 0 auto;
+}
+
 .usual-form {
     width: 500px;
     margin: 0 auto;
+    margin-bottom: 20px;
     padding: 10px;
 }
 
@@ -13,4 +23,61 @@
 .form-colored {
     background-color: lightpink;
     border-radius: 10px;
+}
+
+/* quest-block-2 */
+
+.mainbox {
+    width: 1800px;
+    height: 900px;
+    background-color: burlywood;
+}
+
+.identikit {
+    width: 500px;
+    height: 500px;
+    position: relative;
+    background-color: aquamarine;
+}
+
+.selectbox {
+    width: 1184px;
+    height: 900px;
+    background-color: aquamarine;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 6px;
+}
+
+.imgkit {
+    position: absolute;
+    left: 66px;
+    top: 40px;
+}
+
+.cross {
+    background: none;
+    border: none;
+}
+
+.hair_kit {
+    z-index: 0;
+}
+
+.brows_kit {
+    z-index: 1;
+}
+
+.addition_kit {
+    z-index: 2;
+}
+
+.image-check {
+    visibility: hidden;
+}
+
+.active-wrap {
+    border: 1px solid black;
 }
