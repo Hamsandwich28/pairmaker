@@ -11,7 +11,7 @@ function openTab(evt, tabName) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    document.querySelector(`#${tabName}`).style.display = "block";
+    document.querySelector(`#${tabName}`).style.display = "flex";
     evt.currentTarget.className += " active";
 }
 
@@ -39,4 +39,5 @@ window.onload = () => {
     for (typename of typenames) {
         document.querySelector(`#${typename}1`).click();
     }
+    document.querySelector(`#startbtn`).click();
 }

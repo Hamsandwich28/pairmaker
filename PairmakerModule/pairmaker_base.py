@@ -151,24 +151,38 @@ def quest_block_2():
 @app.route('/quest-block-3', methods=['GET', 'POST'])
 def quest_block_3():
     if request.method == 'POST':
-        movie = _request_form_getter(request, 'movieattitude')
-        lit = _request_form_getter(request, 'litattitude')
         hobby = _request_form_getter(request, 'hobby')
-        if not any(movie) or not any(lit) or not any(hobby):
+        if not any(hobby):
             flash('Ответьте на каждый вопрос', category='alert-warning')
             return render_template('quest-block-3.html',
                                    title='Блок вопросов')
-        answers_paste = {
-            'sportattitude': request.form.get('sportattitude'),
-        }
-        answers_paste.update(_key_values_dict(movie, 'movieattitude', 2))
-        answers_paste.update(_key_values_dict(lit, 'litattitude', 2))
+        answers_paste = {'sportattitude': request.form.get('sportattitude')}
         answers_paste.update(_key_values_dict(hobby, 'hobby', 2))
         dbase.update_table_from_dict_by_user_id(
             current_user.get_id(), 'form', answers_paste
         )
-        return redirect(url_for('personal_info'))
+        return redirect(url_for('quest_block_4'))
     return render_template('quest-block-3.html',
+                           title='Блок вопросов')
+
+
+@app.route('/quest-block-4', methods=['GET', 'POST'])
+def quest_block_4():
+    if request.method == 'POST':
+        movie = _request_form_getter(request, 'movieattitude')
+        lit = _request_form_getter(request, 'litattitude')
+        if not any(movie) or not any(lit):
+            flash('Ответьте на каждый вопрос', category='alert-warning')
+            return render_template('quest-block-4.html',
+                                   title='Блок вопросов')
+        answers_paste = {}
+        answers_paste.update(_key_values_dict(movie, 'movieattitude', 2))
+        answers_paste.update(_key_values_dict(lit, 'litattitude', 2))
+        dbase.update_table_from_dict_by_user_id(
+            current_user.get_id(), 'form', answers_paste
+        )
+        return redirect(url_for('personal_info'))
+    return render_template('quest-block-4.html',
                            title='Блок вопросов')
 
 

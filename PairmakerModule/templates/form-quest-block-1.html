@@ -1,20 +1,32 @@
 <form action="{{ url_for('quest_block_1') }}" method="post">
 
     <div class="quest-block">
-        <div class="mb-3">
-            <input class="form-check-input" type="radio"
-            name="ismale" id="ismale0" value="0" required>
-            <label class="form-check-label" for="ismale0">Женский</label>
-        </div>
-        <div class="mb-3">
-            <input class="form-check-input" type="radio"
-            name="ismale" id="ismale1" value="1">
-            <label class="form-check-label" for="ismale1">Мужской</label>
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
+        <div class="flex-row mt-4">
+            <div class="mb-3 mx-2">
+                <input class="form-check-input" type="radio"
+                name="ismale" id="ismale0" value="0" required>
+                <label class="form-check-label" for="ismale0">
+                    <figure class="image is-128x128">
+                        <img src="{{ url_for('static', filename='img/gender/f.jpg') }}" class="is-rounded">
+                    </figure>
+                </label>
+            </div>
+            <div class="mb-3 mx-2">
+                <input class="form-check-input" type="radio"
+                name="ismale" id="ismale1" value="1">
+                <label class="form-check-label" for="ismale1">
+                    <figure class="image is-128x128">
+                        <img src="{{ url_for('static', filename='img/gender/m.jpg') }}" class="is-rounded">
+                    </figure>
+                </label>
+            </div>
         </div>
     </div><hr>
     
     <div class="quest-block">
-        <div class="mb-3">
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
+        <div class="mb-3">      
             <input class="form-check-input" type="radio"
             name="age" id="age0" value="0" required>
             <label class="form-check-label" for="age0">До 23 лет</label>
@@ -42,6 +54,7 @@
     </div><hr>
 
     <div class="quest-block">
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
         <div class="mb-3">
             <input class="form-check-input" type="radio"
             name="growth" id="growth0" value="0" required>
@@ -64,5 +77,5 @@
         </div>
     </div>
 
-    <input type="submit" class="btn btn-primary">
+    <div class="text-center"><input type="submit" class="button is-danger"></div>
 </form>

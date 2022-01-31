@@ -1,0 +1,11 @@
+{% extends 'base.html' -%}
+
+{% block content -%}
+{% include 'flash.html' %}
+
+    <div class="usual-form form-colored">
+        {% include 'form-quest-block-4.html' %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/quest-block-3.js') }}"></script>
+{% endblock content -%}

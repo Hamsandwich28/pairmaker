@@ -2,98 +2,130 @@
 
 {% block content -%}
 {% include 'flash.html' %}
+    <!-- <div class="card">
+  <div class="card-image">
+    <figure class="image is-4by3">
+      <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+    </figure>
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4">John Smith</p>
+        <p class="subtitle is-6">@johnsmith</p>
+      </div>
+    </div>
 
+    <div class="content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+      <a href="#">#css</a> <a href="#">#responsive</a>
+      <br>
+      <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+    </div>
+  </div>
+</div> -->
     <div class="mainbox mx-auto my-2 is-flex is-flex-direction-row
     is-align-items-center is-justify-content-center">
-        <div class="identikit mx-4">
-
-        {% for key, value in amount.items() -%}
-        {% if key not in ['beard', 'addition'] %}
-        {% for n in range(value) -%}
-            <img src="{{ url_for('static', filename='img/{0}/{1}/{0}{2}.png'.format(key, ismale, n+1)) }}"
-            class="imgkit {{ key }}_kit" id="{{ key }}{{ n+1 }}_kit" hidden>
-        {% endfor -%}
-        {% endif %}
-        {% endfor -%}
-
-        {% for key in ['beard', 'addition'] -%}
-        {% for n in range(amount[key]) -%}
-            <img src="{{ url_for('static', filename='img/{0}/{0}{1}.png'.format(key, n+1)) }}" class="imgkit {{ key }}_kit" id="{{ key }}{{ n+1 }}_kit" hidden>
-        {% endfor -%}
-        {% endfor -%}
-
+        <div class="person-card">
+            <div class="identikit card mx-4">
+                <div class="card-image">
+                {% for key, value in amount.items() -%}
+                {% if key not in ['beard', 'addition'] %}
+                {% for n in range(value) -%}
+                    <img src="{{ url_for('static', filename='img/{0}/{1}/{0}{2}.png'.format(key, ismale, n+1)) }}"
+                    class="imgkit {{ key }}_kit" id="{{ key }}{{ n+1 }}_kit" hidden>
+                {% endfor -%}
+                {% endif %}
+                {% endfor -%}
+                
+    
+                {% for key in ['beard', 'addition'] -%}
+                {% for n in range(amount[key]) -%}
+                    <img src="{{ url_for('static', filename='img/{0}/{0}{1}.png'.format(key, n+1)) }}" 
+                    class="imgkit {{ key }}_kit" id="{{ key }}{{ n+1 }}_kit" hidden>
+                {% endfor -%}
+                {% endfor -%}
+                </div>
+                <div class="card-content">
+                    <div class="media-content">
+                        <p class="title is-4 text-center">{{ current_user.get_name() }}</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="button is-danger next fs-4"
+                onclick="document.querySelector('#kitsubmit').click();">
+                Дальше</button>
+            </div>
         </div>
+        
         <div class="selectbox mx-4">
             <div class="tabs is-centered">
                 <ul>
-                
-                    <li><button id="startbtn" class="tablinks button is-success" onclick="openTab(event, 'brows');">Брови
+                    <li><button id="startbtn" class="tablinks button is-danger" onclick="openTab(event, 'brows');">Брови
                     </button></li>
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'hair');">Волосы
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'hair');">Волосы
                     </button></li>
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'eyes');">Глаза
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'eyes');">Глаза
                     </button></li>
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'lips');">Губы
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'lips');">Губы
                     </button></li>
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'nose');">Нос
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'nose');">Нос
                     </button></li>
                     {% if ismale == 'm' %}
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'beard');">Борода
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'beard');">Борода
                     </button></li>
                     {% endif %}
-                    <li><button class="tablinks button is-success" onclick="openTab(event, 'add');">Дополнительно
+                    <li><button class="tablinks button is-danger" onclick="openTab(event, 'add');">Дополнительно
                     </button></li>
-                    <li><button class="tablinks button is-success" onclick="document.querySelector('#kitsubmit').click();">
-                        Дальше
-                    </button></li>
+                    <li></li>
                 </ul>
             </div>
-
-            <form action="{{ url_for('quest_block_2') }}" method="post">
-
-                <div id="brows" class="tabcontent">
-                    <p class="text-center fs-4">Брови</p>
-                    {% include 'form-identikit-brows.html' -%}
-                </div>
-                <div id="hair" class="tabcontent">
-                    <p class="text-center fs-4">Волосы</p>
-                    {% include 'form-identikit-hair.html' -%}
-                </div>
-                <div id="eyes" class="tabcontent">
-                    <p class="text-center fs-4">Глаза</p>
-                    {% include 'form-identikit-eyes.html' -%}
-                </div>
-                <div id="lips" class="tabcontent">
-                    <p class="text-center fs-4">Губы</p>
-                    {% include 'form-identikit-lips.html' -%}
-                </div>
-                <div id="nose" class="tabcontent">
-                    <p class="text-center fs-4">Нос</p>
-                    {% include 'form-identikit-nose.html' -%}
-                </div>
-                {% if ismale == 'm' %}
-                <div id="beard" class="tabcontent">
-                    <p class="text-center fs-4">Борода</p>
-                    <button type="button" class="cross" onclick="clearBlock('beard');">
-                        <figure class="image is-128x128">
-                            <img src="{{ url_for('static', filename='img/cross/cross3.png') }}">
-                        </figure>
-                    </button>
-                    {% include 'form-identikit-beard.html' -%}
-                </div>
-                {% endif %}
-                <div id="add" class="tabcontent">
-                    <p class="text-center fs-4">Дополнительно</p>
-                    <button type="button" class="cross" onclick="clearBlock('addition');">
-                        <figure class="image is-128x128">
-                            <img src="{{ url_for('static', filename='img/cross/cross3.png') }}">
-                        </figure>
-                    </button>
-                    {% include 'form-identikit-additional.html' -%}
-                </div>
-                <input type="submit" id="kitsubmit" hidden>
-            </form>
-
+            <p class="fs-3 text-center">Составьте свой аватар</p>
+            <div>
+                <form action="{{ url_for('quest_block_2') }}" method="post">
+                    <div id="brows" class="tabcontent">
+                        {% include 'form-identikit-brows.html' -%}
+                    </div>
+                    <div id="hair" class="tabcontent">
+                        {% include 'form-identikit-hair.html' -%}
+                    </div>
+                    <div id="eyes" class="tabcontent">
+                        {% include 'form-identikit-eyes.html' -%}
+                    </div>
+                    <div id="lips" class="tabcontent">
+                        {% include 'form-identikit-lips.html' -%}
+                    </div>
+                    <div id="nose" class="tabcontent">
+                        {% include 'form-identikit-nose.html' -%}
+                    </div>
+                    {% if ismale == 'm' %}
+                    <div id="beard" class="tabcontent">
+                        <button type="button" class="cross" onclick="clearBlock('beard');">
+                            <figure class="image is-128x128">
+                                <img src="{{ url_for('static', filename='img/cross/cross3.png') }}">
+                            </figure>
+                        </button>
+                        {% include 'form-identikit-beard.html' -%}
+                    </div>
+                    {% endif %}
+                    <div id="add" class="tabcontent">
+                        <button type="button" class="cross" onclick="clearBlock('addition');">
+                            <figure class="image is-128x128">
+                                <img src="{{ url_for('static', filename='img/cross/cross3.png') }}">
+                            </figure>
+                        </button>
+                        {% include 'form-identikit-additional.html' -%}
+                    </div>
+                    <input type="submit" id="kitsubmit" hidden>
+                </form>
+            </div>
         </div>
     </div>
 

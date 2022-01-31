@@ -25,36 +25,63 @@ ul {
     border-radius: 10px;
 }
 
+.flex-row { 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 /* quest-block-2 */
 
+button.tablinks {
+    width: 130px;
+}
+
+button.next {
+    width: 400px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.person-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .mainbox {
-    width: 1800px;
-    height: 900px;
-    background-color: burlywood;
+    width: 1690px;
+    height: 860px;
+    background-color: lightpink;
 }
 
 .identikit {
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 440px;
     position: relative;
-    background-color: aquamarine;
+    background-color: mintcream;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 .selectbox {
-    width: 1184px;
-    height: 900px;
-    background-color: aquamarine;
+    width: 1200px;
+    height: 800px;
+    background-color: mintcream;
+    border-radius: 20px;
 }
 
 .tabcontent {
     display: none;
-    padding: 6px 6px;
+    flex-wrap: wrap;
+    align-content: center;
 }
 
 .imgkit {
     position: absolute;
-    left: 66px;
-    top: 40px;
+    left: 18px;
+    top: 36px;
 }
 
 .cross {
@@ -76,8 +103,4 @@ ul {
 
 .image-check {
     visibility: hidden;
-}
-
-.active-wrap {
-    border: 1px solid black;
 }

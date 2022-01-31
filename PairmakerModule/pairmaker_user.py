@@ -15,6 +15,10 @@ class User(UserMixin):
         self.__user = self.userify(self.__user)
         return str(self.__user['id'])
 
+    def get_name(self):
+        self.__user = self.userify(self.__user)
+        return self.__user['firstname']
+
     @classmethod
     def userify(cls, data):
         if type(data) is dict:
