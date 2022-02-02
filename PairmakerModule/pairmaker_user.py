@@ -19,6 +19,18 @@ class User(UserMixin):
         self.__user = self.userify(self.__user)
         return self.__user['firstname']
 
+    def get_login(self):
+        self.__user = self.userify(self.__user)
+        return self.__user['login']
+
+    def get_avatar(self):
+        self.__user = self.userify(self.__user)
+        return self.__user['avatar'].tobytes()
+
+    def get_pair(self):
+        self.__user = self.userify(self.__user)
+        return self.__user['pair']
+
     @classmethod
     def userify(cls, data):
         if type(data) is dict:
@@ -29,6 +41,7 @@ class User(UserMixin):
                 'firstname': data[1],
                 'login': data[2],
                 'passhash': data[3],
-                'avatar': data[4]
+                'avatar': data[4],
+                'pair': data[9]
             }
         return None

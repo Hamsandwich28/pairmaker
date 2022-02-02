@@ -1,5 +1,8 @@
 import re
 import flask
+from typing import Optional
+
+from pairmaker_dict import NumberToString
 
 url_re = '(https?://[^\"\s>]+)'
 amount = {
@@ -51,3 +54,41 @@ def _check_link_format(link: str) -> bool:
     if re.match(url_re, link):
         return True
     return False
+
+
+def _get_user_full_data(user_data: list, identikit_data: list, form_data: list) -> dict:
+    return {
+        'userdata': {
+            'name': user_data[0],
+            'ismale': NumberToString.get_user_gender(user_data[1]),
+            'age': NumberToString.get_user_age(user_data[2]),
+            'growth': NumberToString.get_user_growth(user_data[3])
+        },
+        'identikit': {
+            'brows': identikit_data[1],
+            'eyes': identikit_data[2],
+            'hair': identikit_data[3],
+            'lips': identikit_data[4],
+            'nose': identikit_data[5],
+            'beard': identikit_data[6],
+            'addition': identikit_data[7],
+        },
+        'formdata': {
+            'sport': {
+                'title': 'Отношение к спорту',
+                'value': NumberToString.get_form_sport(form_data[1])
+            },
+            'hobby': {
+                'title': 'Мои увлечения',
+                'value': NumberToString.get_hobby_str(form_data[2], form_data[3])
+            },
+            'movie': {
+                'title': 'Любимые жанры фильмов',
+                'value': NumberToString.get_movie_str(form_data[4], form_data[5])
+            },
+            'lit': {
+                'title': 'Любимые жанры литературы',
+                'value': NumberToString.get_lit_str(form_data[6], form_data[7])
+            }
+        }
+    }

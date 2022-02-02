@@ -1,0 +1,35 @@
+{% extends 'base.html' -%}
+
+{% block content -%}
+{% include 'flash.html' %}
+
+<div class="person-form mx-auto is-flex is-flex-direction-row">
+    <div class="card person-card">
+        <div class="person-identikit">
+            
+        </div>
+        <div class="card-content person-card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                </div>
+            </div>
+            <div class="content">
+                Здесь будут
+                <p>кнопки</p>
+            </div>
+        </div>
+    </div>
+    <div class="form-part">
+
+    </div>
+</div>
+
+
+{% endblock content -%}

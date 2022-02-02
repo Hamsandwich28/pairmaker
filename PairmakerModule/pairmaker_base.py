@@ -2,17 +2,15 @@ import os
 import configparser
 
 import psycopg2
-from flask import Flask, render_template, redirect, url_for, \
-    flash, jsonify, request, g, Request
-from flask_login import LoginManager, login_user, login_required, \
-    logout_user, current_user
+from flask import Flask, render_template, redirect, url_for, flash, request, g, make_response
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from pairmaker_user import User
 from pairmaker_database import Database
-from pairmaker_handler import _key_values_dict, _check_img_format, \
-    _request_form_getter, _check_link_format, _request_identikit_parser, \
-    amount
+from pairmaker_handler import _key_values_dict, _check_img_format, _request_form_getter, _check_link_format, \
+    _request_identikit_parser, _get_user_full_data, amount
+from pairmaker_dict import NumberToString, IdentikitPathBuilder
 
 # config
 app = Flask(__name__)
@@ -181,18 +179,19 @@ def quest_block_4():
         dbase.update_table_from_dict_by_user_id(
             current_user.get_id(), 'form', answers_paste
         )
-        return redirect(url_for('personal_info'))
+        return redirect(url_for('quest_block_5'))
     return render_template('quest-block-4.html',
                            title='Блок вопросов')
 
 
-@app.route('/personal-info')
-def personal_info():
-    return render_template('personal-info.html')
+@app.route('/quest-block-5')
+def quest_block_5():
+    return render_template('quest-block-5.html',
+                           title='Блок вопросов')
 
 
-@app.route('/personal-info', methods=['POST'])
-def personal_info_upload():
+@app.route('/quest-block-5', methods=['POST'])
+def quest_block_5_upload():
     file = request.files.get('file')
     link = request.form.get('link')
     if file and _check_img_format(file.filename) and _check_link_format(link):
@@ -200,20 +199,45 @@ def personal_info_upload():
             image = file.read()
             if not dbase.update_user_avatar_and_link(current_user.get_id(), image, link):
                 flash('Изображение не удалось загрузить', category='alert-warning')
-                return redirect(url_for('personal_info'))
+                return redirect(url_for('quest_block_5'))
         except FileNotFoundError:
             flash('Изображение не найдено', category='alert-warning')
-            return redirect(url_for('personal_info'))
+            return redirect(url_for('quest_block_5'))
     else:
         flash('Некорректные данные, повторите ввод', category='alert-warning')
-        return redirect(url_for('personal_info'))
+        return redirect(url_for('quest_block_5'))
 
-    return redirect(url_for('main_page'))
+    return redirect(url_for('person_page', user_id=current_user.get_id()))
 
 
-@app.route('/main-page')
-def main_page():
-    return render_template('main-page.html')
+@app.route('/userava')
+def userava():
+    img = current_user.get_avatar()
+    if not img:
+        return ''
+
+    h = make_response(img)
+    h.headers['Content-Type'] = 'image/png'
+    return h
+
+
+@app.route('/person-page/<user_id>')
+def person_page(user_id: int):
+    if not dbase.check_user_exist_by_id(user_id):
+        flash('Данный пользователь не зарегистрирован', 'alert-warning')
+        return redirect(url_for('person_page', user_id=current_user.get_id()))
+    base_user_data = dbase.select_user_base_data(user_id)
+    identikit_data = dbase.select_all_data_from_table_by_id(user_id, 'identikit')
+    form_data = dbase.select_all_data_from_table_by_id(user_id, 'form')
+    user_gender = bool(base_user_data[1])
+    full_data = _get_user_full_data(base_user_data, identikit_data, form_data)
+    image_paths = IdentikitPathBuilder.construct_image_paths(full_data['identikit'], user_gender)
+    open_profile = current_user.get_id() == user_id or current_user.get_pair() == user_id
+    return render_template('person-page.html',
+                           title='Страница пользователя',
+                           open=open_profile,
+                           data=full_data,
+                           paths=image_paths)
 
 
 if __name__ == '__main__':

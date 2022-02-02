@@ -1,5 +1,12 @@
+/* common */
+
 ul {
     list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: white;
 }
 
 .flash {
@@ -25,7 +32,7 @@ ul {
     border-radius: 10px;
 }
 
-.flex-row { 
+.flex-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -60,7 +67,6 @@ button.next {
     width: 400px;
     height: 440px;
     position: relative;
-    background-color: mintcream;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -93,14 +99,68 @@ button.next {
     z-index: 0;
 }
 
-.brows_kit {
+.beard_kit {
     z-index: 1;
 }
 
-.addition_kit {
+.eyes_kit {
+    z-index: 1;
+}
+
+.nose_kit {
+    z-index: 1;
+}
+
+.lips_kit {
+    z-index: 1;
+}
+
+.brows_kit {
     z-index: 2;
+}
+
+.addition_kit {
+    z-index: 3;
 }
 
 .image-check {
     visibility: hidden;
+}
+
+/* person-page */
+
+.person-form {
+    width: 1220px;
+    height: 600px;
+    padding: 10px;
+    background-color: lightpink;
+}
+
+.person-card {
+    width: 600px;
+    padding: 10px;
+    background-color: green;
+}
+
+.person-identikit {
+    width: 400px;
+    height: 400px;
+    position: relative;
+    background-color: crimson;
+}
+
+.person-image-kit {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.person-card-content {
+    width: 400px;
+}
+
+.form-part {
+    width: 600px;
+    padding: 10px;
+    background-color: blue;
 }
