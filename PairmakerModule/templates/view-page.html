@@ -3,9 +3,27 @@
 {% block content -%}
 {% include 'flash.html' %}
 
-<div class="person-cards-field">
+<a href="/person-page/{{ selfid }}">Вернуться назад</a>
+
+<div class="view-page-cards-box">
     {% for person in persons -%}
-    <p>{{ person.name }} | {{ person.stage }}</p>
+    <button class="view-page"><a href="/person-page/{{ person.id }}">
+    <div class="card view-page-card">
+        <div class="card-image view-page-image-card">
+            {% for part, path in person.paths.items() -%}
+                <img src="{{ url_for('static', filename='{}'.format(path)) }}"
+                alt="Placeholder image" class="{{ part }}_kit view-page-image-pos">
+            {% endfor -%}
+        </div>
+        <div class="card-content view-page-card-content">
+            <div class="media">
+                <div class="media-content">
+                    <p class="title is-4">{{ person.name }} | {{ person.stage }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </a></button>
     {% endfor -%}
 </div>
 

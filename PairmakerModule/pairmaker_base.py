@@ -261,13 +261,14 @@ def view_page():
         stage = selector.juxtaposition(row)
         base_user_data = dbase.select_user_base_data(row[0])
         kit_data = dbase.select_all_data_from_table_by_id(row[0], 'identikit')
-        user_gender = bool(base_user_data[0])
+        user_gender = bool(base_user_data[1])
         image_path = IdentikitPathBuilder.construct_image_paths(_identikit_tuple_to_dict(kit_data), user_gender)
-        persons.append({'name': base_user_data[0], 'stage': stage, 'paths': image_path})
-    persons.sort(key=lambda x: x['stage'])
+        persons.append({'id': row[0], 'name': base_user_data[0], 'stage': stage, 'paths': image_path})
+    persons.sort(key=lambda x: x['stage'], reverse=True)
     return render_template('view-page.html',
                            title='Ищу пару',
-                           persons=persons)
+                           persons=persons,
+                           selfid=current_user.get_id())
 
 
 if __name__ == '__main__':
