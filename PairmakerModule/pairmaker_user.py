@@ -27,10 +27,6 @@ class User(UserMixin):
         self.__user = self.userify(self.__user)
         return self.__user['avatar'].tobytes()
 
-    def get_pair(self):
-        self.__user = self.userify(self.__user)
-        return self.__user['pair']
-
     @classmethod
     def userify(cls, data):
         if type(data) is dict:
@@ -42,6 +38,5 @@ class User(UserMixin):
                 'login': data[2],
                 'passhash': data[3],
                 'avatar': data[4],
-                'pair': data[9]
             }
         return None

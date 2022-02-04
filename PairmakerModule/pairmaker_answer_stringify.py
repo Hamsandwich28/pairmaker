@@ -71,49 +71,49 @@ class NumberToString:
 
     @classmethod
     def get_user_age(cls, agenum: int) -> str:
-        return cls._num_to_age[str(agenum)] if agenum else cls.placeholder
+        return cls._num_to_age[str(agenum)] if agenum is not None else cls.placeholder
 
     @classmethod
     def get_user_growth(cls, growthnum: int) -> str:
-        return cls._num_to_growth[str(growthnum)] if growthnum else cls.placeholder
+        return cls._num_to_growth[str(growthnum)] if growthnum is not None else cls.placeholder
 
     @classmethod
     def get_form_sport(cls, sportnum: int) -> str:
-        return cls._num_to_sport[str(sportnum)] if sportnum else cls.placeholder
+        return cls._num_to_sport[str(sportnum)] if sportnum is not None else cls.placeholder
 
     @classmethod
     def get_form_hobby(cls, hobbynum: int) -> str:
-        return cls._num_to_hobby[str(hobbynum)] if hobbynum else cls.placeholder
+        return cls._num_to_hobby[str(hobbynum)] if hobbynum is not None else cls.placeholder
 
     @classmethod
     def get_form_movie(cls, movienum: int) -> str:
-        return cls._num_to_movie[str(movienum)] if movienum else cls.placeholder
+        return cls._num_to_movie[str(movienum)] if movienum is not None else cls.placeholder
 
     @classmethod
     def get_form_lit(cls, litnum: int) -> str:
-        return cls._num_to_lit[str(litnum)] if litnum else cls.placeholder
+        return cls._num_to_lit[str(litnum)] if litnum is not None else cls.placeholder
 
     @classmethod
     def get_hobby_str(cls, value1: int, value2: Optional[int]) -> str:
-        if not value1:
+        if value1 is None:
             return cls.placeholder
-        if value2:
+        if value2 is not None:
             return f"{NumberToString.get_form_hobby(value1)}, {NumberToString.get_form_hobby(value2)}"
         return f"{NumberToString.get_form_hobby(value1)}"
 
     @classmethod
     def get_movie_str(cls, value1: int, value2: Optional[int]) -> str:
-        if not value1:
+        if value1 is None:
             return cls.placeholder
-        if value2:
+        if value2 is not None:
             return f"{NumberToString.get_form_movie(value1)}, {NumberToString.get_form_movie(value2)}"
         return f"{NumberToString.get_form_movie(value1)}"
 
     @classmethod
     def get_lit_str(cls, value1: int, value2: Optional[int]) -> str:
-        if not value1:
+        if value1 is None:
             return cls.placeholder
-        if value2:
+        if value2 is not None:
             return f"{NumberToString.get_form_lit(value1)}, {NumberToString.get_form_lit(value2)}"
         return f"{NumberToString.get_form_lit(value1)}"
 

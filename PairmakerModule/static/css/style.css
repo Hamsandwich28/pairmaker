@@ -156,11 +156,16 @@ button.next {
 }
 
 .person-card-content {
-    width: 400px;
+    width: 440px;
+}
+
+.person-control {
+    width: 200px;
+    border: none;
 }
 
 .form-part {
     width: 600px;
     padding: 10px;
-    background-color: blue;
+    background-color: lightgray;
 }

@@ -1,0 +1,12 @@
+{% extends 'base.html' -%}
+
+{% block content -%}
+{% include 'flash.html' %}
+
+<div class="person-cards-field">
+    {% for person in persons -%}
+    <p>{{ person.name }} | {{ person.stage }}</p>
+    {% endfor -%}
+</div>
+
+{% endblock content -%}

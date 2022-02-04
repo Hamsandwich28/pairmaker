@@ -8,9 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from pairmaker_user import User
 from pairmaker_database import Database
+from pairmaker_utils import UserSelector
+from pairmaker_answer_stringify import NumberToString, IdentikitPathBuilder
 from pairmaker_handler import _key_values_dict, _check_img_format, _request_form_getter, _check_link_format, \
-    _request_identikit_parser, _get_user_full_data, amount
-from pairmaker_dict import NumberToString, IdentikitPathBuilder
+    _request_identikit_parser, _get_user_full_data, _construct_dict_from_user_form, _identikit_tuple_to_dict, \
+    amount
+
 
 # config
 app = Flask(__name__)
@@ -133,7 +136,7 @@ def quest_block_1():
 def quest_block_2():
     if request.method == 'POST':
         kit = _request_identikit_parser(request)
-        print(kit)
+        dbase.update_identikit_set_all_null_by_user_id(current_user.get_id())
         dbase.update_table_from_dict_by_user_id(current_user.get_id(), 'identikit', kit)
         return redirect(url_for('quest_block_3'))
     ismale = dbase.select_user_is_male(current_user.get_id())
@@ -210,13 +213,11 @@ def quest_block_5_upload():
     return redirect(url_for('person_page', user_id=current_user.get_id()))
 
 
-@app.route('/userava')
-def userava():
-    img = current_user.get_avatar()
-    if not img:
-        return ''
-
-    h = make_response(img)
+@app.route('/userava/<int:user_id>')
+def userava(user_id: int):
+    image: memoryview = dbase.select_user_avatar_by_id(user_id)
+    image = image.tobytes()
+    h = make_response(image)
     h.headers['Content-Type'] = 'image/png'
     return h
 
@@ -227,17 +228,46 @@ def person_page(user_id: int):
         flash('Данный пользователь не зарегистрирован', 'alert-warning')
         return redirect(url_for('person_page', user_id=current_user.get_id()))
     base_user_data = dbase.select_user_base_data(user_id)
+    social_user_data = dbase.select_user_social_by_id(user_id)
     identikit_data = dbase.select_all_data_from_table_by_id(user_id, 'identikit')
     form_data = dbase.select_all_data_from_table_by_id(user_id, 'form')
     user_gender = bool(base_user_data[1])
-    full_data = _get_user_full_data(base_user_data, identikit_data, form_data)
+    full_data = _get_user_full_data(base_user_data, social_user_data, identikit_data, form_data)
     image_paths = IdentikitPathBuilder.construct_image_paths(full_data['identikit'], user_gender)
-    open_profile = current_user.get_id() == user_id or current_user.get_pair() == user_id
+
+    if current_user.get_id() == user_id:
+        own_profile = open_profile = True
+    else:
+        own_profile = False
+        open_profile = dbase.check_users_relation(current_user.get_id(), user_id)
+
     return render_template('person-page.html',
                            title='Страница пользователя',
+                           own=own_profile,
                            open=open_profile,
                            data=full_data,
-                           paths=image_paths)
+                           paths=image_paths,
+                           id=int(user_id))
+
+
+@app.route('/view-page')
+def view_page():
+    persons = []
+    our_data = dbase.select_all_data_from_table_by_id(current_user.get_id(), 'form')
+    selector = UserSelector(our_data)
+    for row in dbase.load_persons_form_data(current_user.get_id(), 50, 0):
+        if row[0] == int(current_user.get_id()):
+            continue
+        stage = selector.juxtaposition(row)
+        base_user_data = dbase.select_user_base_data(row[0])
+        kit_data = dbase.select_all_data_from_table_by_id(row[0], 'identikit')
+        user_gender = bool(base_user_data[0])
+        image_path = IdentikitPathBuilder.construct_image_paths(_identikit_tuple_to_dict(kit_data), user_gender)
+        persons.append({'name': base_user_data[0], 'stage': stage, 'paths': image_path})
+    persons.sort(key=lambda x: x['stage'])
+    return render_template('view-page.html',
+                           title='Ищу пару',
+                           persons=persons)
 
 
 if __name__ == '__main__':

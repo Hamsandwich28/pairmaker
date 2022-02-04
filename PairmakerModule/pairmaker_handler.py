@@ -2,7 +2,7 @@ import re
 import flask
 from typing import Optional
 
-from pairmaker_dict import NumberToString
+from pairmaker_answer_stringify import NumberToString
 
 url_re = '(https?://[^\"\s>]+)'
 amount = {
@@ -56,23 +56,54 @@ def _check_link_format(link: str) -> bool:
     return False
 
 
-def _get_user_full_data(user_data: list, identikit_data: list, form_data: list) -> dict:
+def _construct_dict_from_user_form(data: tuple) -> dict:
+    return {
+        'sport': data[1],
+        'hobby1': data[2],
+        'hobby2': data[3],
+        'movie1': data[4],
+        'movie2 ': data[5],
+        'lit1': data[6],
+        'lit2': data[7]
+    }
+
+
+def _identikit_tuple_to_dict(data: list) -> dict:
+    return {
+        'brows': data[1],
+        'eyes': data[2],
+        'hair': data[3],
+        'lips': data[4],
+        'nose': data[5],
+        'beard': data[6],
+        'addition': data[7]
+    }
+
+
+def _get_user_full_data(user_data: list,
+                        social_data: Optional[str],
+                        identikit_data: list,
+                        form_data: list) -> dict:
     return {
         'userdata': {
-            'name': user_data[0],
-            'ismale': NumberToString.get_user_gender(user_data[1]),
-            'age': NumberToString.get_user_age(user_data[2]),
-            'growth': NumberToString.get_user_growth(user_data[3])
+            'name': {
+                'title': 'Имя',
+                'value': user_data[0],
+            },
+            'ismale': {
+                'title': 'Пол',
+                'value': NumberToString.get_user_gender(user_data[1])
+            },
+            'age': {
+                'title': 'Возраст',
+                'value': NumberToString.get_user_age(user_data[2])
+            },
+            'growth': {
+                'title': 'Рост',
+                'value': NumberToString.get_user_growth(user_data[3])
+            }
         },
-        'identikit': {
-            'brows': identikit_data[1],
-            'eyes': identikit_data[2],
-            'hair': identikit_data[3],
-            'lips': identikit_data[4],
-            'nose': identikit_data[5],
-            'beard': identikit_data[6],
-            'addition': identikit_data[7],
-        },
+        'identikit': _identikit_tuple_to_dict(identikit_data),
         'formdata': {
             'sport': {
                 'title': 'Отношение к спорту',
@@ -89,6 +120,12 @@ def _get_user_full_data(user_data: list, identikit_data: list, form_data: list) 
             'lit': {
                 'title': 'Любимые жанры литературы',
                 'value': NumberToString.get_lit_str(form_data[6], form_data[7])
+            }
+        },
+        'socialdata': {
+            'social': {
+                'title': 'Связь с пользователем',
+                'value': social_data
             }
         }
     }

@@ -82,7 +82,7 @@ class Database:
         return None
 
     def select_user_base_data(self, user_id: int) -> Optional[tuple]:
-        """Получение данных пола, возраста, роста пользователя по id"""
+        """Получение данных имя, пола, возраста, роста пользователя по id"""
         try:
             sql = f"SELECT firstname, ismale, age, growth FROM users WHERE id = {user_id};"
             self.__cur.execute(sql)
@@ -109,12 +109,91 @@ class Database:
             print('Ошибка чтения пользователя -> ', e)
         return None
 
+    def select_user_avatar_by_id(self, user_id: int) -> Optional[memoryview]:
+        try:
+            sql = f"SELECT avatar FROM users WHERE id = {user_id};"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            if res:
+                return res[0]
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения пользователя -> ', e)
+        return None
+
+    def select_user_social_by_id(self, user_id: int) -> Optional[tuple]:
+        try:
+            sql = f"SELECT social FROM users WHERE id = {user_id};"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            if res:
+                return res[0]
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения пользователя -> ', e)
+        return None
+
+    # relations
+
+    def select_user_relations(self, ourid: int) -> list:
+        try:
+            sql = f"SELECT theirid, status FROM relations WHERE ourid = {ourid};"
+            self.__cur.execute(sql)
+            res = list(self.__cur.fetchall())
+            return res
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return []
+
+    def select_user_enter_application(self, theirid: int) -> list:
+        try:
+            sql = f"SELECT theirid, status FROM relations WHERE theirid = {theirid};"
+            self.__cur.execute(sql)
+            res = list(self.__cur.fetchall())
+            return res
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return []
+
+    def load_persons_form_data(self, except_id: int, limit: int, offset: int) -> list:
+        try:
+            sql = f"SELECT * FROM form WHERE id <> {except_id} LIMIT {limit} OFFSET {offset};"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchall()
+            return res
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return []
+
+    def check_users_relation(self, ourid: int, theirid: int) -> Optional[int]:
+        try:
+            sql = f"SELECT theirid, status FROM relations WHERE ourid = {ourid} AND theirid = {theirid};"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            return res
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return None
+
     def check_user_exist_by_id(self, user_id: int) -> bool:
         try:
             sql = f"SELECT firstname FROM users WHERE id = {user_id};"
             self.__cur.execute(sql)
             res = self.__cur.fetchone()
             if len(res) > 0:
+                return True
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения пользователя -> ', e)
+        return False
+
+    def check_user_has_pair(self, user_id: int) -> bool:
+        try:
+            sql = f"SELECT pair FROM users WHERE id = {user_id};"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            if res:
                 return True
 
         except psycopg2.Error as e:
@@ -156,5 +235,19 @@ class Database:
 
         except psycopg2.Error as e:
             self.__db.rollback()
+            print('Ошибка обновления записей ответов -> ', e)
+        return False
+
+    def update_identikit_set_all_null_by_user_id(self, user_id: int) -> bool:
+        try:
+            sql = f"""
+            UPDATE identikit SET
+            brows = NULL, eyes = NULL, hair = NULL,
+            lips = NULL, nose = NULL, beard = NULL, addition = NULL
+            WHERE id = {user_id};"""
+            self.__cur.execute(sql)
+            return True
+
+        except psycopg2.Error as e:
             print('Ошибка обновления записей ответов -> ', e)
         return False

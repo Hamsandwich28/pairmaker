@@ -6,28 +6,56 @@
 <div class="person-form mx-auto is-flex is-flex-direction-row">
     <div class="card person-card">
         <div class="person-identikit">
-            
+            {% for part, path in paths.items() -%}
+            <img src="{{ url_for('static', filename='{}'.format(path)) }}"
+            alt="template" class="{{ part }}_kit person-image-kit">
+            {% endfor -%}
         </div>
         <div class="card-content person-card-content">
             <div class="media">
+                {% if own or open %}
                 <div class="media-left">
                     <figure class="image is-48x48">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                        <img src="{{ url_for('userava', user_id=id) }}"
+                        alt="Placeholder image">
                     </figure>
                 </div>
+                {% endif %}
                 <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
+                    <p class="title is-4">{{ data.userdata.name.value | title }}</p>
+                    {% if own or open %}
+                    <p class="subtitle is-6">{{ data.socialdata.social.value }}</p>
+                    {% endif %}
                 </div>
             </div>
-            <div class="content">
-                Здесь будут
-                <p>кнопки</p>
+
+            <div class="content is-flex is-flex-direction-row
+            is-justify-content-center mt-4">
+
+                {% if own %}
+                <button type="button" class="button is-danger person-control">
+                    <a href="#">Посмотреть заявки</a>
+                </button>
+                {% else %}
+                <button type="button" class="button is-danger person-control">
+                    Организовать пару
+                </button>
+                {% endif %}
+
+                <button type="button" class="button is-danger person-control">
+                    <a href="{{ url_for('view_page') }}">Найти пару</a>
+                </button>
             </div>
         </div>
     </div>
     <div class="form-part">
-
+        {% for field in data.userdata.values() -%}
+        <p><span>{{ field.title }}</span> - <span>{{ field.value }}</span></p>
+        {% endfor -%}
+        <hr>
+        {% for field in data.formdata.values() -%}
+        <p><span>{{ field.title }}</span> - <span>{{ field.value }}</span></p>
+        {% endfor -%}
     </div>
 </div>
 
