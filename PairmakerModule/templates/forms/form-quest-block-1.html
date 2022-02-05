@@ -1,0 +1,81 @@
+<form action="{{ url_for('quest_block_1') }}" method="post">
+
+    <div class="quest-block">
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
+        <div class="flex-row mt-4">
+            <div class="mb-3 mx-2">
+                <input class="form-check-input" type="radio"
+                name="ismale" id="ismale0" value="0" required>
+                <label class="form-check-label" for="ismale0">
+                    <figure class="image is-128x128">
+                        <img src="{{ url_for('static', filename='img/gender/f.jpg') }}" class="is-rounded">
+                    </figure>
+                </label>
+            </div>
+            <div class="mb-3 mx-2">
+                <input class="form-check-input" type="radio"
+                name="ismale" id="ismale1" value="1">
+                <label class="form-check-label" for="ismale1">
+                    <figure class="image is-128x128">
+                        <img src="{{ url_for('static', filename='img/gender/m.jpg') }}" class="is-rounded">
+                    </figure>
+                </label>
+            </div>
+        </div>
+    </div><hr>
+    
+    <div class="quest-block">
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
+        <div class="mb-3">      
+            <input class="form-check-input" type="radio"
+            name="age" id="age0" value="0" required>
+            <label class="form-check-label" for="age0">До 23 лет</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="age" id="age1" value="1">
+            <label class="form-check-label" for="age1">От 23 до 27 лет</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="age" id="age2" value="2">
+            <label class="form-check-label" for="age2">От 27 до 32 лет</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="age" id="age3" value="3">
+            <label class="form-check-label" for="age3">От 32 до 37 лет</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="age" id="age4" value="4">
+            <label class="form-check-label" for="age4">От 37 и старше</label>
+        </div>
+    </div><hr>
+
+    <div class="quest-block">
+        <p class="has-text-centered is-size-4">Выбери свой пол</p>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="growth" id="growth0" value="0" required>
+            <label class="form-check-label" for="growth0">до 165 см</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="growth" id="growth1" value="1">
+            <label class="form-check-label" for="growth1">от 165 до 172 см</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="growth" id="growth2" value="2">
+            <label class="form-check-label" for="growth2">от 172 до 178 см</label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="growth" id="growth3" value="3">
+            <label class="form-check-label" for="growth3">от 178 см и выше</label>
+        </div>
+    </div>
+
+    <div class="text-center"><input type="submit" class="button is-danger"></div>
+</form>

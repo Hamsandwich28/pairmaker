@@ -1,0 +1,153 @@
+<form action="{{ url_for('quest_block_3') }}" method="post">
+
+    <p class="has-text-centered is-size-4">Твое отношение к спорту?</p>
+    <div class="quest-block">
+        <div class="my-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude2" value="2" required>
+            <label class="form-check-label" for="sportattitude2">
+                Очень хорошо, регулярно занимаюсь
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude1" value="1">
+            <label class="form-check-label" for="sportattitude1">
+                Больше болельщик, чем спортсмен 
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="radio"
+            name="sportattitude" id="sportattitude0" value="0">
+            <label class="form-check-label" for="sportattitude0">
+                Ни то, ни другое 
+            </label>
+        </div>
+    </div><hr>
+
+    <p class="has-text-centered is-size-4">Выбери свои хобби (не больше двух)</p>
+    <div class="quest-block">
+        <div class="my-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby0" id="hobby0" value="0"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby0">
+                Рисование
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby1" id="hobby1" value="1"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby1">
+                Пение
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby2" id="hobby2" value="2"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby2">
+                Танцы
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby3" id="hobby3" value="3"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby3">
+                Игра на музыкальном инструменте
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby4" id="hobby4" value="4"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby4">
+                Туризм
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby5" id="hobby5" value="5"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby5">
+                Катание на сноуборде
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby6" id="hobby6" value="6"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby6">
+                Катание на горных лыжах
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby7" id="hobby7" value="7"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby7">
+                Коллекционирование
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby8" id="hobby8" value="8"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby8">
+                Путешествие
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby9" id="hobby9" value="9"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby9">
+                Катание на коньках
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby10" id="hobby10" value="10"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby10">
+                Катание на велосипеде
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby11" id="hobby11" value="11"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby11">
+                Йога
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby12" id="hobby12" value="12"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby12">
+                Вязание
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby13" id="hobby13" value="13"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby13">
+                Вышивка
+            </label>
+        </div>
+        <div class="mb-3">
+            <input class="form-check-input" type="checkbox"
+            name="hobby14" id="hobby14" value="14"
+            onclick="selectHobbyHandle(this);">
+            <label class="form-check-label" for="hobby14">
+                Рукоделие
+            </label>
+        </div>
+    </div>
+
+    <div class="text-center"><input type="submit" class="button is-danger"></div>
+</form>

@@ -4,7 +4,8 @@ from typing import Optional
 
 from pairmaker_answer_stringify import NumberToString
 
-url_re = '(https?://[^\"\s>]+)'
+# '(https?://[^\"\s>]+)'
+masks = ['https://vk.com/', 'https://instagram.com/', r'(\d{11})']
 amount = {
     'beard': 4,
     'brows': 20,
@@ -51,81 +52,63 @@ def _request_identikit_parser(req: flask.Request) -> dict:
 
 
 def _check_link_format(link: str) -> bool:
-    if re.match(url_re, link):
+    if masks[0] in link or masks[1] in link or re.match(masks[2], link):
         return True
     return False
 
 
-def _construct_dict_from_user_form(data: tuple) -> dict:
+def _get_base_data_str(base_data: tuple) -> dict:
     return {
-        'sport': data[1],
-        'hobby1': data[2],
-        'hobby2': data[3],
-        'movie1': data[4],
-        'movie2 ': data[5],
-        'lit1': data[6],
-        'lit2': data[7]
-    }
-
-
-def _identikit_tuple_to_dict(data: list) -> dict:
-    return {
-        'brows': data[1],
-        'eyes': data[2],
-        'hair': data[3],
-        'lips': data[4],
-        'nose': data[5],
-        'beard': data[6],
-        'addition': data[7]
-    }
-
-
-def _get_user_full_data(user_data: list,
-                        social_data: Optional[str],
-                        identikit_data: list,
-                        form_data: list) -> dict:
-    return {
-        'userdata': {
-            'name': {
-                'title': 'Имя',
-                'value': user_data[0],
-            },
-            'ismale': {
-                'title': 'Пол',
-                'value': NumberToString.get_user_gender(user_data[1])
-            },
-            'age': {
-                'title': 'Возраст',
-                'value': NumberToString.get_user_age(user_data[2])
-            },
-            'growth': {
-                'title': 'Рост',
-                'value': NumberToString.get_user_growth(user_data[3])
-            }
-        },
-        'identikit': _identikit_tuple_to_dict(identikit_data),
-        'formdata': {
-            'sport': {
-                'title': 'Отношение к спорту',
-                'value': NumberToString.get_form_sport(form_data[1])
-            },
-            'hobby': {
-                'title': 'Мои увлечения',
-                'value': NumberToString.get_hobby_str(form_data[2], form_data[3])
-            },
-            'movie': {
-                'title': 'Любимые жанры фильмов',
-                'value': NumberToString.get_movie_str(form_data[4], form_data[5])
-            },
-            'lit': {
-                'title': 'Любимые жанры литературы',
-                'value': NumberToString.get_lit_str(form_data[6], form_data[7])
-            }
-        },
-        'socialdata': {
-            'social': {
-                'title': 'Связь с пользователем',
-                'value': social_data
-            }
+        'name': base_data[1],
+        'links': {
+            'link_vk': base_data[8],
+            'link_inst': base_data[9],
+            'link_num': base_data[10]
         }
     }
+
+
+def _get_kit_data_str(kit_data: tuple) -> dict:
+    return {
+        'brows': kit_data[1],
+        'eyes': kit_data[2],
+        'hair': kit_data[3],
+        'lips': kit_data[4],
+        'nose': kit_data[5],
+        'beard': kit_data[6],
+        'addition': kit_data[7]
+    }
+
+
+def _get_form_data_str(form_data: tuple, base_data: tuple) -> dict:
+    result = {
+        'gender': {
+            'title': 'Пол',
+            'value': NumberToString.get_user_gender(base_data[4])
+        },
+        'age': {
+            'title': 'Возраст',
+            'value': NumberToString.get_user_age(base_data[5])
+        },
+        'growth': {
+            'title': 'Рост',
+            'value': NumberToString.get_user_growth(base_data[6])
+        },
+        'sport': {
+            'title': 'Отношение к спорту',
+            'value': NumberToString.get_form_sport(form_data[1])
+        },
+        'hobby': {
+            'title': 'Любимые занятия',
+            'value': NumberToString.get_hobby_str(form_data[2], form_data[3])
+        },
+        'movie': {
+            'title': 'Любимые жанры фильмов',
+            'value': NumberToString.get_movie_str(form_data[4], form_data[5])
+        },
+        'lit': {
+            'title': 'Любимые жанры литературы',
+            'value': NumberToString.get_lit_str(form_data[6], form_data[7])
+        }
+    }
+    return result

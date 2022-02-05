@@ -149,6 +149,7 @@ button.next {
     position: relative;
     background-color: crimson;
     border-radius: 50%;
+    overflow: hidden;
 }
 
 .person-image-kit {
@@ -183,8 +184,8 @@ button.view-page {
     min-width: 800px;
     width: 1120px;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: row!important;
+    flex-wrap: wrap!important;
     flex-flow: row;
     margin: 0 auto;
 }

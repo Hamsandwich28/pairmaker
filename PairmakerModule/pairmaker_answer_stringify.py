@@ -125,9 +125,6 @@ class IdentikitPathBuilder:
 
     @classmethod
     def _get_common_path(cls, part: str, value: int, ismale: bool) -> str:
-        if part not in cls.common_types:
-            raise ValueError("Неверный тип части тела!")
-
         gender_prefix = 'm' if ismale else 'f'
         return f"{cls.basepath}/{part}/{gender_prefix}/{part}{value}.{cls.extension}"
 

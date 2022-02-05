@@ -1,0 +1,35 @@
+{% extends 'base.html' -%}
+
+{% block content -%}
+{% include 'flash.html' %}
+
+<a href="/person-page/{{ selfid }}">Вернуться назад</a>
+
+<div class="enter-request-block">
+    {% if data %}
+    {% for row in data -%}
+    <div class="enter-request-data-row">
+        <div>
+            {{ row.name | title }}
+        </div>
+        <div>
+            <button class="button is-danger is-rounded">
+                <a href="/person-page/{{ row.id }}">Посмотреть профиль</a>
+            </button>
+            <button class="button is-danger is-rounded"
+            id="user_{{ row.id }}" onclick="acceptRequest(this.id);">
+                Принять заявку
+            </button>
+        </div>
+    </div>
+    {% endfor -%}
+    {% else %}
+    <div>
+        Вам ещё не пришло заявок!
+    </div>
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/enter-requests.js') }}"></script>
+
+{% endblock content -%}
