@@ -265,7 +265,9 @@ def person_page(user_id: int):
     if current_user.get_id() == user_id:
         own_profile = open_profile = True
     else:
-        own_profile = open_profile = False
+        own_profile = False
+        open_profile = dbase.check_profile_open(current_id, user_id)
+        print(open_profile)
 
     return render_template('person-page.html',
                            title='Страница пользователя',
@@ -322,18 +324,30 @@ def view_page():
 
 @app.route('/enter-requests')
 def enter_requests():
-    result = []
-    data = dbase.select_user_enter_requests(current_user.get_id())
-    print(data)
-    for row in data:
-        result.append({
-            'id': row[0],
-            'name': row[1]
+    requests = {'sent': [], 'entered': []}
+    current_id = current_user.get_id()
+    sent_persons = dbase.select_sent_requests(current_id)
+    entered_persons = dbase.select_entered_requests(current_id)
+    print(sent_persons)
+    print(entered_persons)
+    for sent_row in sent_persons:
+        requests['sent'].append({
+            'name': sent_row[0],
+            'id': sent_row[1],
+            'status': sent_row[2]
         })
+    for entered_row in entered_persons:
+        requests['entered'].append({
+            'name': entered_row[0],
+            'id': entered_row[1],
+            'status': entered_row[2]
+        })
+    requests['sent'].sort(key=lambda x: x['status'], reverse=True)
+    requests['entered'].sort(key=lambda x: x['status'], reverse=True)
     return render_template('enter-requests.html',
-                           title='Входящие запросы',
-                           selfid=current_user.get_id(),
-                           data=result)
+                           title='Запросы',
+                           requests=requests,
+                           selfid=current_id)
 
 
 @app.route('/enter-page-accept-requests', methods=['POST'])

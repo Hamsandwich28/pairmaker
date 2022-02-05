@@ -6,7 +6,51 @@
 <a href="/person-page/{{ selfid }}">Вернуться назад</a>
 
 <div class="enter-request-block">
-    {% if data %}
+    {% if requests.sent %}
+    {% for req in requests.sent -%}
+    <div class="">
+        {{ req.name | title }}
+    </div>
+    <div class="">
+        <button class="button is-danger is-rounded">
+            <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
+        </button>
+    </div>
+    {% endfor -%}
+    {% else %}
+    <div class="">
+        Исходящих заявок нет!
+    </div>
+    {% endif %}
+    <hr>
+    {% if requests.entered %}
+    {% for req in requests.entered -%}
+    <div class="">
+        {{ req.name | title }}
+    </div>
+    <div class="">
+        <button class="button is-danger is-rounded">
+            <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
+        </button>
+        {% if req.status == 1 %}
+        <button class="button is-danger is-rounded"
+        id="user_{{ req.id }}" onclick="acceptRequest(this.id);">
+            Принять заявку
+        </button>
+        {% elif req.status == 0 %}
+        <button class="button is-danger is-rounded"
+        id="user_{{ req.id }}" disabled>
+            Запрос принят
+        </button>
+        {% endif %}
+    </div>
+    {% endfor -%}
+    {% else %}
+    <div class="">
+        Входящих заявок нет!
+    </div>
+    {% endif %}
+    <!-- {% if data %}
     {% for row in data -%}
     <div class="enter-request-data-row">
         <div>
@@ -27,7 +71,7 @@
     <div>
         Вам ещё не пришло заявок!
     </div>
-    {% endif %}
+    {% endif %} -->
 </div>
 
 <script src="{{ url_for('static', filename='js/enter-requests.js') }}"></script>

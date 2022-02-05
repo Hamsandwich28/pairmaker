@@ -165,7 +165,7 @@ class Database:
             print('Ошибка чтения записей отношений -> ', e)
         return []
 
-    def select_person_minimal_data(self, user_id: tuple) -> tuple:
+    def select_person_minimal_data(self, user_id: int) -> tuple:
         try:
             sql = f"""
             SELECT i.*, u.firstname, u.ismale
@@ -180,12 +180,58 @@ class Database:
             print('Ошибка чтения записей персоны -> ', e)
         return
 
+    def select_entered_requests(self, user_id: int) -> list:
+        try:
+            sql = f"""
+            SELECT u.firstname, r.ourid, r.status
+            FROM relations AS r 
+            JOIN users AS u ON u.id = r.ourid
+            WHERE r.theirid = {user_id} AND status > -1;"""
+            self.__cur.execute(sql)
+            res = self.__cur.fetchall()
+            return res
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return []
+
+    def select_sent_requests(self, user_id: int) -> list:
+        try:
+            sql = f"""
+            SELECT u.firstname, r.ourid, r.status
+            FROM relations AS r 
+            JOIN users AS u ON u.id = r.ourid
+            WHERE r.theirid = {user_id} AND status < 0;"""
+            self.__cur.execute(sql)
+            res = self.__cur.fetchall()
+            return res
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return []
+
     def check_user_exist(self, user_id: int) -> bool:
         try:
             sql = f"SELECT id FROM users WHERE id = {user_id};"
             self.__cur.execute(sql)
             res = self.__cur.fetchone()
             if res:
+                return True
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей отношений -> ', e)
+        return False
+
+    def check_profile_open(self, user_id_one: int, user_id_two: int) -> bool:
+        try:
+            sql = f"""
+            SELECT status FROM relations
+            WHERE (ourid = {user_id_one} AND theirid = {user_id_two});"""
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            if not res:
+                return False
+            if (res[0] + 4) % 2 == 0:
                 return True
 
         except psycopg2.Error as e:
@@ -253,19 +299,26 @@ class Database:
             return True
 
         except psycopg2.Error as e:
+            self.__db.rollback()
             print('Ошибка обновления записей ответов -> ', e)
         return False
 
     def update_users_relations(self, ourid: int, theirid: int) -> bool:
         try:
-            sql = f"""
+            sql1 = f"""
             UPDATE relations SET
             status = 0
-            WHERE theirid = {ourid} AND ourid = {theirid};"""
-            self.__cur.execute(sql)
+            WHERE (theirid = {ourid} AND ourid = {theirid});"""
+            sql2 = f"""
+            UPDATE relations SET
+            status = -2
+            WHERE (ourid = {ourid} AND theirid = {theirid});"""
+            self.__cur.execute(sql1)
+            self.__cur.execute(sql2)
             self.__db.commit()
             return True
 
         except psycopg2.Error as e:
+            self.__db.rollback()
             print('Ошибка обновления записей ответов -> ', e)
         return False
