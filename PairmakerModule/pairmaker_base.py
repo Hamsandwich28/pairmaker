@@ -74,14 +74,15 @@ def logout():
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        checked = len(dbase.select_all_data_from_table_by_id(current_user.get_id(), 'form'))
-        if checked > 0:
+        row = dbase.select_all_data_from_table_by_id(current_user.get_id(), 'users')[7]
+        if row:
             return redirect(url_for('person_page', user_id=current_user.get_id()))
-        else:
-            return redirect(url_for('quest_block_1'))
+        return redirect(url_for('quest_block_1'))
 
+    navbar = {'loggedin': False}
     return render_template('index.html',
-                           title='Начало')
+                           title='Начало',
+                           navbar=navbar)
 
 
 @app.route('/login', methods=['POST'])
@@ -92,8 +93,8 @@ def login():
     if userdata and check_password_hash(userdata['passhash'], password):
         userlogin = User().create(userdata)
         login_user(userlogin)
-        checked = len(dbase.select_all_data_from_table_by_id(current_user.get_id(), 'form'))
-        if checked > 0:
+        row = dbase.select_all_data_from_table_by_id(current_user.get_id(), 'users')[7]
+        if row:
             return redirect(url_for('person_page', user_id=current_user.get_id()))
         return redirect(url_for('quest_block_1'))
     else:
@@ -122,6 +123,7 @@ def register():
 
 
 @app.route('/quest-block-1', methods=['GET', 'POST'])
+@login_required
 def quest_block_1():
     if request.method == 'POST':
         answers_paste = {
@@ -133,8 +135,10 @@ def quest_block_1():
             current_user.get_id(), 'users', answers_paste
         )
         return redirect(url_for('quest_block_2'))
+    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-1.html',
-                           title='Блок вопросов')
+                           title='Блок вопросов',
+                           navbar=navbar)
 
 
 @app.route('/quest-block-2', methods=['GET', 'POST'])
@@ -148,10 +152,12 @@ def quest_block_2():
     if ismale is None:
         return redirect(url_for('quest_block_1'))
 
+    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-2.html',
                            title='Блок вопросов',
                            ismale='m' if ismale else 'f',
-                           amount=amount)
+                           amount=amount,
+                           navbar=navbar)
 
 
 @app.route('/quest-block-3', methods=['GET', 'POST'])
@@ -168,8 +174,11 @@ def quest_block_3():
             current_user.get_id(), 'form', answers_paste
         )
         return redirect(url_for('quest_block_4'))
+
+    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-3.html',
-                           title='Блок вопросов')
+                           title='Блок вопросов',
+                           navbar=navbar)
 
 
 @app.route('/quest-block-4', methods=['GET', 'POST'])
@@ -244,6 +253,7 @@ def userava(user_id: int):
 
 
 @app.route('/person-page/<user_id>')
+@login_required
 def person_page(user_id: int):
     if not dbase.check_user_exist(user_id):
         flash('Данного пользователя не существует', category='alert-warning')
@@ -267,14 +277,14 @@ def person_page(user_id: int):
     else:
         own_profile = False
         open_profile = dbase.check_profile_open(current_id, user_id)
-        print(open_profile)
 
     return render_template('person-page.html',
                            title='Страница пользователя',
                            own=own_profile,
                            open=open_profile,
                            data=data,
-                           id=int(user_id))
+                           id=int(user_id),
+                           navbar=navbar)
 
 
 @app.route('/person-page-send', methods=['POST'])
@@ -286,6 +296,7 @@ def person_page_send():
 
 
 @app.route('/view-page')
+@login_required
 def view_page():
     person_ids, person_stages = [], []
     offset, limit, cap, req_stage = 0, 50, 50, 1
@@ -323,6 +334,7 @@ def view_page():
 
 
 @app.route('/enter-requests')
+@login_required
 def enter_requests():
     requests = {'sent': [], 'entered': []}
     current_id = current_user.get_id()

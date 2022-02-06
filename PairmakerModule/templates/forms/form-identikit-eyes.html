@@ -1,6 +1,0 @@
-{% for n in range(amount.eyes) -%}
-<input type="radio" name="eyes" class="image-check" id="eyes{{ loop.index }}" value="{{ loop.index }}" onclick="resetKit(this.name, this.id);" required>
-<label for="eyes{{ loop.index }}"><figure class="image is-128x128">
-    <img src="{{ url_for('static', filename='img/eyes/{0}/eyes{1}.png'.format(ismale, n+1))}}" alt="template">
-</figure></label>
-{% endfor -%}

@@ -1,6 +1,6 @@
-<a href="{{ url_for('logout') }}">Выйти из профиля</a>
 {% for cat, msg in get_flashed_messages(True) -%}
-    <div class="flash alert {{ cat }} alert-dismissible fade show" role="alert"> {{ msg }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="notification {{ cat }}">
+    <button class="delete"></button>
+    {{ msg }}
+</div>
 {% endfor -%}

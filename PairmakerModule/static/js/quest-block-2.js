@@ -1,18 +1,17 @@
 function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
+    var i, tabcontent;
 
     tabcontent = document.querySelectorAll(".tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
 
-    tablinks = document.querySelectorAll(".tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    const liArray = document.querySelectorAll('.is-active');
+    for (el of liArray) {
+        el.className = el.className.replace(" is-active", "");
     }
-
+    document.querySelector(`li.${tabName}`).className += " is-active";
     document.querySelector(`#${tabName}`).style.display = "flex";
-    evt.currentTarget.className += " active";
 }
 
 function clearBlock(blockname) {

@@ -3,8 +3,29 @@
 {% block content -%}
 {% include 'flash.html' %}
 
-    <div class="usual-form form-colored">
-        {% include 'form-quest-block-1.html' %}
+<div class="columns">
+    <div class="column"></div>
+    <div class="column is-half">
+        <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+            <ul>
+                <li class="is-active"><a>Основное</a></li>
+                <li><a>Аватар</a></li>
+                <li><a>Хобби</a></li>
+                <li><a>Вкусы</a></li>
+                <li><a>Ссылки</a></li>
+            </ul>
+        </nav>
+        <div class="card my-4">
+            <div class="card-content">
+                
+                <div class="content">
+                    {% include 'form-quest-block-1.html' %}
+                </div>
+            </div>
+        </div>
+
     </div>
-    
+    <div class="column"></div>
+</div>
+
 {% endblock content -%}
