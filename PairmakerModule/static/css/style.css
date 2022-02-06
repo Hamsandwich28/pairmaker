@@ -1,3 +1,22 @@
+#content {
+    display: none;
+}
+
+#preload {
+    display: block;
+    margin-top: 200px;
+}
+
+.isVisible {
+    display: block !important;
+}
+
+.isHidden {
+    display: none !important;
+}
+
+/* forms */
+
 .invisible {
     visibility: hidden;
 }
@@ -31,7 +50,7 @@ button.next {
 }
 
 .mainbox {
-    width: 1690px;
+    width: 1310px;
     height: 860px;
 }
 
@@ -110,4 +129,42 @@ button.next {
 .person-image {
     position: absolute;
     top: 0;
+}
+
+/* view-page */
+
+button.view-page {
+    background-color: #fff;
+    border: none;
+}
+
+.vp-wrap {
+    min-width: 800px;
+    width: 940px;
+    display: flex;
+    flex-direction: row!important;
+    flex-wrap: wrap!important;
+    flex-flow: row;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.vp-card {
+    width: 280px;
+    height: 385px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.vp-image-card {
+    height: 333px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.vp-image-pos {
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

@@ -16,19 +16,33 @@
 </head>
 
 <body>
-    {% block basecontent -%}
-    <div class="columns is-mobile">
-        <div class="column"></div>
-        <div class="column is-half">
-            {% include 'navbar.html' %}
-            {% include 'flash.html' %}
-            {% block content -%}
-            {% endblock content -%}
-            {% include 'footer.html' %}
+    <div id="preload">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column is-half">
+                <progress class="progress is-large is-info" max="100">60%</progress>
+            </div>
+            <div class="column"></div>
         </div>
-        <div class="column"></div>
+
     </div>
-    {% endblock basecontent -%}
+    <div id="content">
+        {% block basecontent -%}
+        {% include 'navbar.html' %}
+        <div class="columns is-mobile">
+            <div class="column"></div>
+            <div class="column is-half">
+                {% include 'flash.html' %}
+                {% block content -%}
+                {% endblock content -%}
+            </div>
+            <div class="column"></div>
+        </div>
+        {% include 'footer.html' %}
+        {% endblock basecontent -%}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/preload.js') }}"></script>
 </body>
 
 </html>

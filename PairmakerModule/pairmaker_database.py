@@ -178,7 +178,7 @@ class Database:
 
         except psycopg2.Error as e:
             print('Ошибка чтения записей персоны -> ', e)
-        return
+        return None
 
     def select_entered_requests(self, user_id: int) -> list:
         try:

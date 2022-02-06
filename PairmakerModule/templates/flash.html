@@ -1,5 +1,5 @@
 {% for cat, msg in get_flashed_messages(True) -%}
-<div class="notification {{ cat }}">
+<div class="notification is-warning {{ cat }}">
     <button class="delete"></button>
     {{ msg }}
 </div>

@@ -1,29 +1,22 @@
 {% extends 'base.html' -%}
 
 {% block content -%}
-{% include 'flash.html' %}
 
-<a href="/person-page/{{ selfid }}">Вернуться назад</a>
-
-<div class="view-page-cards-box">
+<div class="vp-wrap my-3">
     {% for person in persons -%}
-    <button class="view-page"><a href="/person-page/{{ person.id }}">
-    <div class="card view-page-card">
-        <div class="card-image view-page-image-card">
-            {% for part, path in person.paths.items() -%}
-                <img src="{{ url_for('static', filename='{}'.format(path)) }}"
-                alt="Placeholder image" class="{{ part }}_kit view-page-image-pos">
-            {% endfor -%}
-        </div>
-        <div class="card-content view-page-card-content">
-            <div class="media">
-                <div class="media-content">
-                    <p class="title is-4">{{ person.name }} | {{ person.stage }}</p>
-                </div>
+    <a href="/person-page/{{ person.id }}">
+        <div class="card vp-card">
+            <div class="card-image vp-image-card">
+                {% for part, path in person.paths.items() -%}
+                <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="Placeholder image"
+                    class="{{ part }}_kit vp-image-pos">
+                {% endfor -%}
+            </div>
+            <div class="content">
+                <p class="has-text-centered is-size-4 mb-2">{{ person.name | title }}</p>
             </div>
         </div>
-    </div>
-    </a></button>
+    </a>
     {% endfor -%}
 </div>
 

@@ -67,7 +67,7 @@ def close_db(error):
 @login_required
 def logout():
     logout_user()
-    flash('Вы успешно вышли из аккаунта', category='alert-success')
+    flash('Вы успешно вышли из аккаунта', category='is-success')
     return redirect(url_for('index'))
 
 
@@ -98,7 +98,7 @@ def login():
             return redirect(url_for('person_page', user_id=current_user.get_id()))
         return redirect(url_for('quest_block_1'))
     else:
-        flash('Логин или пароль неверны', category='alert-warning')
+        flash('Логин или пароль неверны', category='is-warning')
 
     return redirect(url_for('index'))
 
@@ -109,7 +109,7 @@ def register():
     login = request.form.get('login')
     password = request.form.get('password')
     if len(firstname) < 2 or len(login) < 6 or len(password) < 6:
-        flash('Некорректные данные полей', category='alert-warning')
+        flash('Некорректные данные полей', category='is-warning')
         return redirect(url_for('index'))
 
     if dbase.insert_new_user(firstname, login, generate_password_hash(password)):
@@ -118,7 +118,7 @@ def register():
         login_user(userlogin)
         return redirect(url_for('quest_block_1'))
     else:
-        flash('Данный логин уже зарегистрирован', category='alert-warning')
+        flash('Данный логин уже зарегистрирован', category='is-warning')
         return redirect(url_for('index'))
 
 
@@ -165,7 +165,7 @@ def quest_block_3():
     if request.method == 'POST':
         hobby = _request_form_getter(request, 'hobby')
         if not any(hobby):
-            flash('Ответьте на каждый вопрос', category='alert-warning')
+            flash('Ответьте на каждый вопрос', category='is-warning')
             return render_template('quest-block-3.html',
                                    title='Блок вопросов')
         answers_paste = {'sportattitude': request.form.get('sportattitude')}
@@ -187,7 +187,7 @@ def quest_block_4():
         movie = _request_form_getter(request, 'movieattitude')
         lit = _request_form_getter(request, 'litattitude')
         if not any(movie) or not any(lit):
-            flash('Ответьте на каждый вопрос', category='alert-warning')
+            flash('Ответьте на каждый вопрос', category='is-warning')
             return render_template('quest-block-4.html',
                                    title='Блок вопросов')
         answers_paste = {}
@@ -219,22 +219,22 @@ def quest_block_5_upload():
     link_inst = request.form.get('link_inst')
     link_num = request.form.get('link_num')
     if not any([link_vk, link_inst, link_num]):
-        flash('Укажите хотя бы одну ссылку', category='alert-warning')
+        flash('Укажите хотя бы одну ссылку', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
     for link in [link_vk, link_inst, link_num]:
         if link and not _check_link_format(link):
-            flash('Некорректная ссылка, повторите ввод', category='alert-warning')
+            flash('Некорректная ссылка, повторите ввод', category='is-warning')
             return redirect(url_for('quest_block_5'))
 
     if file and _check_img_format(file.filename):
         try:
             image = file.read()
         except FileNotFoundError:
-            flash('Изображение не найдено', category='alert-warning')
+            flash('Изображение не найдено', category='is-warning')
             return redirect(url_for('quest_block_5'))
     else:
-        flash('Некорректное изображение - требуется png формат', category='alert-warning')
+        flash('Некорректное изображение - требуется png формат', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
     current_id = current_user.get_id()
@@ -242,7 +242,7 @@ def quest_block_5_upload():
             dbase.update_user_avatar(current_id, image) and
             dbase.update_user_links(current_id, [link_vk, link_inst, link_num])
     ):
-        flash('Не удалось загрузить данные', category='alert-warning')
+        flash('Не удалось загрузить данные', category='is-warning')
         return redirect(url_for('quest_block_5'))
     return redirect(url_for('person_page', user_id=current_user.get_id()))
 
@@ -261,7 +261,7 @@ def userava(user_id: int):
 @login_required
 def person_page(user_id: int):
     if not dbase.check_user_exist(user_id):
-        flash('Данного пользователя не существует', category='alert-warning')
+        flash('Данного пользователя не существует', category='is-warning')
         return redirect(url_for('person_page', user_id=current_user.get_id()))
 
     current_id = current_user.get_id()
@@ -323,6 +323,8 @@ def view_page():
     persons = []
     for i, person_id in enumerate(person_ids):
         person_data = dbase.select_person_minimal_data(person_id)
+        if not person_data:
+            continue
         persons.append({
             'stage': person_stages[i],
             'id': person_data[0],
@@ -364,10 +366,12 @@ def enter_requests():
         })
     requests['sent'].sort(key=lambda x: x['status'], reverse=True)
     requests['entered'].sort(key=lambda x: x['status'], reverse=True)
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
     return render_template('enter-requests.html',
                            title='Запросы',
                            requests=requests,
-                           selfid=current_id)
+                           selfid=current_id,
+                           navbar=navbar)
 
 
 @app.route('/enter-page-accept-requests', methods=['POST'])

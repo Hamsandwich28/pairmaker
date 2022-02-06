@@ -1,4 +1,4 @@
-<nav class="navbar mb-6" role="navigation" aria-label="main navigation">
+<nav class="navbar is-light mb-6" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item">
             <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
@@ -13,6 +13,18 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
+            <div class="navbar-item">
+                <div class="buttons">
+                    {% if navbar.formcomplete %}
+                    <a class="button is-light" href="/view-page">
+                        <strong>Поиск</strong>
+                    </a>
+                    <a class="button is-primary" href="/enter-requests">
+                        <strong>Заявки</strong>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
         <div class="navbar-end">

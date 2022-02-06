@@ -3,76 +3,83 @@
 {% block content -%}
 {% include 'flash.html' %}
 
-<a href="/person-page/{{ selfid }}">Вернуться назад</a>
-
-<div class="enter-request-block">
-    {% if requests.sent %}
-    {% for req in requests.sent -%}
-    <div class="">
-        {{ req.name | title }}
-    </div>
-    <div class="">
-        <button class="button is-danger is-rounded">
-            <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
-        </button>
-    </div>
-    {% endfor -%}
-    {% else %}
-    <div class="">
-        Исходящих заявок нет!
-    </div>
-    {% endif %}
-    <hr>
-    {% if requests.entered %}
-    {% for req in requests.entered -%}
-    <div class="">
-        {{ req.name | title }}
-    </div>
-    <div class="">
-        <button class="button is-danger is-rounded">
-            <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
-        </button>
-        {% if req.status == 1 %}
-        <button class="button is-danger is-rounded"
-        id="user_{{ req.id }}" onclick="acceptRequest(this.id);">
-            Принять заявку
-        </button>
-        {% elif req.status == 0 %}
-        <button class="button is-danger is-rounded"
-        id="user_{{ req.id }}" disabled>
-            Запрос принят
-        </button>
-        {% endif %}
-    </div>
-    {% endfor -%}
-    {% else %}
-    <div class="">
-        Входящих заявок нет!
-    </div>
-    {% endif %}
-    <!-- {% if data %}
-    {% for row in data -%}
-    <div class="enter-request-data-row">
-        <div>
-            {{ row.name | title }}
-        </div>
-        <div>
-            <button class="button is-danger is-rounded">
-                <a href="/person-page/{{ row.id }}">Посмотреть профиль</a>
+{% if requests.sent %}
+{% for req in requests.sent -%}
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            {{ req.name | title }}
+        </p>
+        <p class="subtitle">
+            <button class="button is-primary">
+                <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
             </button>
-            <button class="button is-danger is-rounded"
-            id="user_{{ row.id }}" onclick="acceptRequest(this.id);">
+            {% if req.status == 1 %}
+            <button class="button is-warning" id="user_{{ req.id }}" onclick="acceptRequest(this.id);">
                 Принять заявку
             </button>
-        </div>
+            {% elif req.status == 0 %}
+            <button class="button is-danger" id="user_{{ req.id }}" disabled>
+                Запрос принят
+            </button>
+            {% endif %}
+        </p>
     </div>
-    {% endfor -%}
-    {% else %}
-    <div>
-        Вам ещё не пришло заявок!
+</section>
+<br/>
+{% endfor -%}
+{% else %}
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            Исходящих заявок нет
+        </p>
+        <p class="subtitle">
+            К сожалению исходящих заявок ещё нет
+        </p>
     </div>
-    {% endif %} -->
-</div>
+</section>
+{% endif %}
+
+<hr>
+
+{% if requests.entered %}
+{% for req in requests.entered -%}
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            {{ req.name | title }}
+        </p>
+        <p class="subtitle">
+            <button class="button is-primary">
+                <a href="/person-page/{{ req.id }}">Посмотреть профиль</a>
+            </button>
+            {% if req.status == 1 %}
+            <button class="button is-warning" id="user_{{ req.id }}" onclick="acceptRequest(this.id);">
+                Принять заявку
+            </button>
+            {% elif req.status == 0 %}
+            <button class="button is-danger" id="user_{{ req.id }}" disabled>
+                Запрос принят
+            </button>
+            {% endif %}
+        </p>
+    </div>
+</section>
+<br/>
+{% endfor -%}
+{% else %}
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            Входящих заявок нет
+        </p>
+        <p class="subtitle">
+            К сожалению входящих заявок ещё нет
+        </p>
+    </div>
+</section>
+{% endif %}
 
 <script src="{{ url_for('static', filename='js/enter-requests.js') }}"></script>
 
