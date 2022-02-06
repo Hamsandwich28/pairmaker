@@ -197,14 +197,19 @@ def quest_block_4():
             current_user.get_id(), 'form', answers_paste
         )
         return redirect(url_for('quest_block_5'))
+
+    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-4.html',
-                           title='Блок вопросов')
+                           title='Блок вопросов',
+                           navbar=navbar)
 
 
 @app.route('/quest-block-5')
 def quest_block_5():
+    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-5.html',
-                           title='Блок вопросов')
+                           title='Блок вопросов',
+                           navbar=navbar)
 
 
 @app.route('/quest-block-5', methods=['POST'])
@@ -278,6 +283,7 @@ def person_page(user_id: int):
         own_profile = False
         open_profile = dbase.check_profile_open(current_id, user_id)
 
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
     return render_template('person-page.html',
                            title='Страница пользователя',
                            own=own_profile,
@@ -327,10 +333,12 @@ def view_page():
             )
         })
     persons.sort(key=lambda x: x['stage'], reverse=True)
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
     return render_template('view-page.html',
                            title='Ищу пару',
                            persons=persons,
-                           selfid=current_id)
+                           selfid=current_id,
+                           navbar=navbar)
 
 
 @app.route('/enter-requests')

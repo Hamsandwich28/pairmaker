@@ -3,9 +3,29 @@
 {% block content -%}
 {% include 'flash.html' %}
 
-    <div class="usual-form form-colored">
-        {% include 'form-quest-block-4.html' %}
-    </div>
+<div class="columns is-mobile">
+    <div class="column"></div>
+    <div class="column is-three-quarters">
+        <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+            <ul>
+                <li><a>Основное</a></li>
+                <li><a>Аватар</a></li>
+                <li><a>Хобби</a></li>
+                <li class="is-active"><a>Вкусы</a></li>
+                <li><a>Ссылки</a></li>
+            </ul>
+        </nav>
+        <div class="card my-4">
+            <div class="card-content">
+                <div class="content">
+                    {% include 'form-quest-block-4.html' %}
+                </div>
+            </div>
+        </div>
 
-    <script src="{{ url_for('static', filename='js/quest-block-3.js') }}"></script>
+    </div>
+    <div class="column"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/quest-block-3.js') }}"></script>
 {% endblock content -%}

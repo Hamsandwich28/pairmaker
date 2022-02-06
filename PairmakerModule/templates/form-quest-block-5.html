@@ -1,19 +1,58 @@
 <form action="{{ url_for('quest_block_5_upload') }}" method="post" enctype="multipart/form-data">
 
-    <p class="has-text-centered is-size-4">Загрузите своё настоящее фото</p>
-    <div class="quest-block my-4">
-        <div><input class="form-control button is-danger" type="file" name="file" required></div>
+    <p class="has-text-centered is-size-4 mt-3">Загрузите своё настоящее фото</p>
+    <div class="columns mb-3">
+        <div class="column"></div>
+        <div class="column is-three-quarters">
+            <div id="file-js-example" class="file is-fullwidth is-info has-name">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="file" required>
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Выбрать файл
+                        </span>
+                    </span>
+                    <span class="file-name">
+                        Файл не выбран...
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="column"></div>
     </div>
-
+    <hr>
     <p class="has-text-centered is-size-4">Укажите ссылку на свою соцсеть</p>
-    <div class="quest-block my-4">
-        <div><input class="input is-danger is-rounded form-control" type="text"
-                placeholder="Ссылка на страницу в вконтакте" name="link_vk"></div>
-        <div><input class="input is-danger is-rounded form-control" type="text"
-                placeholder="Ссылка на страницу в инстраграмме" name="link_inst"></div>
-        <div><input class="input is-danger is-rounded form-control" type="text"
-                placeholder="Номер телефона" name="link_num"></div>
+    <div class="columns mb-1">
+        <div class="column"></div>
+        <div class="column is-three-quarters">
+            <div class="my-2">
+                <input class="input" type="text" placeholder="Ссылка на страницу в вконтакте" name="link_vk">
+            </div>
+            <div class="my-2">
+                <input class="input" type="text" placeholder="Ссылка на страницу в инстраграмме" name="link_inst">
+            </div>
+            <div class="my-2">
+                <input class="input" type="text" placeholder="Номер телефона" name="link_num">
+            </div>
+        </div>
+        <div class="column"></div>
     </div>
 
-    <div class="text-center"><input type="submit" class="button is-danger"></div>
+    <div class="columns">
+        <div class="column"></div>
+        <div class="column is-three-quarters">
+            <div class="field">
+                <div class="control">
+                    <input type="submit" class="button is-info" value="Дальше">
+                </div>
+            </div>
+        </div>
+        <div class="column"></div>
+    </div>
+
+    
+    
 </form>

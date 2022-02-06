@@ -99,3 +99,15 @@ button.next {
 .image-check {
     visibility: hidden;
 }
+
+/* person-page */
+
+.person-images-box {
+    position: relative;
+    height: 400px;
+}
+
+.person-image {
+    position: absolute;
+    top: 0;
+}

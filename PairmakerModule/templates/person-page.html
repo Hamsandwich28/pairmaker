@@ -1,67 +1,125 @@
 {% extends 'base.html' -%}
 
 {% block content -%}
-{% include 'flash.html' %}
 
-<div class="person-form mx-auto is-flex is-flex-direction-row">
-    <div class="card person-card">
-        <div class="person-identikit">
-            {% for part, path in data.paths.items() -%}
-            <img src="{{ url_for('static', filename='{}'.format(path)) }}"
-            alt="template" class="{{ part }}_kit person-image-kit">
-            {% endfor -%}
-        </div>
-        <div class="card-content person-card-content">
-            <div class="media">
-                {% if own or open %}
-                <div class="media-left">
-                    <figure class="image is-48x48">
-                        <img src="{{ url_for('userava', user_id=id) }}"
-                        alt="Placeholder image">
-                    </figure>
-                </div>
-                {% endif %}
-                <div class="media-content">
-                    <p class="title is-4">{{ data.present.name | title }}</p>
-                    {% if own or open %}
-                    {% for link in data.present.links.values() -%}
-                    {% if link != "NULL" %}
-                    <p class="subtitle is-6"><a>{{ link }}</a></p>
-                    {% endif %}
-                    {% endfor -%}
-                    {% endif %}
+<div class="columns is-mobile">
+    <div class="column"></div>
+    <div class="column is-two-thirds">
+        <div class="card">
+            <div class="card-image p-5 person-images-box">
+                <div class="columns is-mobile">
+                    <div class="column"></div>
+                    <div class="column is-two-thirds">
+                        {% if open and not own %}
+                        <figure class="image is-square">
+                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
+                        </figure>
+                        {% else %}
+                        {% for part, path in data.paths.items() -%}
+                        <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="template"
+                            class="{{ part }}_kit person-image">
+                        {% endfor -%}
+                        {% endif %}
+                    </div>
+                    <div class="column"></div>
                 </div>
             </div>
+            <hr>
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        {% if own %}
+                        <figure class="image is-96x96">
+                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
+                        </figure>
+                        {% endif %}
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">{{ data.present.name }}</p>
+                        {% if own or open %}
+                        <table class="table is-fullwidth">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {% if data.present.links.link_vk.value != 'NULL' %}
+                                        <a href="{{ data.present.links.link_vk.value }}">
+                                            {{ data.present.links.link_vk.title }}
+                                        </a>
+                                        {% else %}
+                                        <p>{{ data.present.links.link_vk.title }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if data.present.links.link_inst.value != 'NULL' %}
+                                        <a href="{{ data.present.links.link_inst.value }}">
+                                            {{ data.present.links.link_inst.title }}
+                                        </a>
+                                        {% else %}
+                                        <p>{{ data.present.links.link_inst.title }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if data.present.links.link_num.value != 'NULL' %}
+                                        <p>{{ data.present.links.link_num.value }}</p>
+                                        {% else %}
+                                        <p>{{ data.present.links.link_num.title }}</p>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <div class="content is-flex is-flex-direction-row
-            is-justify-content-center mt-4">
-
-                {% if own %}
-                <button type="button" class="button is-danger is-rounded person-control">
-                    <a href="{{ url_for('enter_requests') }}">Посмотреть заявки</a>
-                </button>
-                {% elif open %}
-                <button class="button is-danger is-rounded person-control"
-                type="button" disabled>
-                    Заявка принята
-                </button>
-                {% else %}
-                <button type="button" class="button is-danger is-rounded person-control"
-                id="sendButton" onclick="sendRequest(this.id, userId);">
-                    Хочу общаться
-                </button>
-                {% endif %}
-                <button type="button" class="button is-danger is-rounded person-control">
-                    <a href="{{ url_for('view_page') }}">Найти пару</a>
-                </button>
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <table class="table is-stripped is-hoverable">
+                        <tbody>
+                            {% for field in data.form.values() -%}
+                            <tr>
+                                <td><span>{{ field.title }}</span></td>
+                                <td><span>{{ field.value }}</span></td>
+                            </tr>
+                            {% endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="columns mx-4 mb-2">
+                <div class="column">
+                    {% if own %}
+                    <a href="{{ url_for('enter_requests') }}">
+                        <button type="button" class="button is-warning is-fullwidth">
+                            Посмотреть заявки
+                        </button>
+                    </a>
+                    {% elif open %}
+                    <button class="button is-warning is-fullwidth" type="button" disabled>
+                        Заявка принята
+                    </button>
+                    {% else %}
+                    <button class="button is-warning is-fullwidth" id="sendButton"
+                        onclick="sendRequest(this.id, userId);">
+                        <span>Хочу общаться</span>
+                    </button>
+                    {% endif %}
+                </div>
+                <div class="column is-one-third"></div>
+                <div class="column">
+                    <a href="/view-page">
+                        <button class="button is-danger is-fullwidth">
+                            <span>Найти пару</span>
+                        </button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="form-part">
-        {% for field in data.form.values() -%}
-        <p><span>{{ field.title }}</span> - <span>{{ field.value }}</span></p>
-        {% endfor -%}
-    </div>
+    <div class="column"></div>
 </div>
 
 <script>

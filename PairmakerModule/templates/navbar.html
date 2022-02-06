@@ -18,13 +18,14 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
+                    {% if navbar.formcomplete %}
+                    <a class="button is-primary" href="/person-page/{{ navbar.backid }}">
+                        <strong>Мой профиль</strong>
+                    </a>
+                    {% endif %}
                     {% if navbar.loggedin %}
                     <a class="button is-light" href="{{ url_for('logout') }}">
                         Выйти из профиля
-                    </a>
-                    {% elif navbar.formcomplete %}
-                    <a class="button is-primary">
-                        <strong>Мой профиль</strong>
                     </a>
                     {% else %}
                     <a class="button is-primary js-modal-trigger"

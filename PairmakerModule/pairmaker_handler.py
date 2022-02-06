@@ -61,9 +61,18 @@ def _get_base_data_str(base_data: tuple) -> dict:
     return {
         'name': base_data[1],
         'links': {
-            'link_vk': base_data[8],
-            'link_inst': base_data[9],
-            'link_num': base_data[10]
+            'link_vk': {
+                'title': 'Вконтакте',
+                'value': base_data[8]
+            },
+            'link_inst': {
+                'title': 'Инстраграм',
+                'value': base_data[9]
+            },
+            'link_num': {
+                'title': 'Телефон',
+                'value': base_data[10]
+            }
         }
     }
 
