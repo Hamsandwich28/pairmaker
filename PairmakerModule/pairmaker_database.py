@@ -238,6 +238,17 @@ class Database:
             print('Ошибка чтения записей отношений -> ', e)
         return False
 
+    def check_profiles_amount(self) -> Optional[int]:
+        try:
+            sql = f"SELECT COUNT(*) FROM users;"
+            self.__cur.execute(sql)
+            res = self.__cur.fetchone()
+            return res[0]
+
+        except psycopg2.Error as e:
+            print('Ошибка чтения записей -> ', e)
+        return None
+
     def update_table_from_dict_by_user_id(self,
                                           user_id: int,
                                           table: str,

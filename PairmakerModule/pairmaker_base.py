@@ -1,7 +1,9 @@
 import os
+import random
+import datetime
+import psycopg2
 import configparser
 
-import psycopg2
 from flask import Flask, render_template, redirect, url_for, flash, request, g, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -306,8 +308,12 @@ def person_page_send():
 @app.route('/view-page')
 @login_required
 def view_page():
+    available = datetime.date.today() > datetime.date(2022, 2, 14)
     person_ids, person_stages = [], []
-    offset, limit, cap, req_stage = 0, 50, 50, 1
+    limit, cap, req_stage = 50, 50, 3
+    profiles_rows = dbase.check_profiles_amount()
+    offset = random.randint(0, max(0, profiles_rows - limit))
+    print(offset)
     current_id = current_user.get_id()
     selector = UserSelector(dbase.select_all_data_from_table_by_id(current_user.get_id(), 'form'))
     while True:
@@ -342,7 +348,8 @@ def view_page():
                            title='Ищу пару',
                            persons=persons,
                            selfid=current_id,
-                           navbar=navbar)
+                           navbar=navbar,
+                           available=True)
 
 
 @app.route('/enter-requests')
@@ -352,8 +359,6 @@ def enter_requests():
     current_id = current_user.get_id()
     sent_persons = dbase.select_sent_requests(current_id)
     entered_persons = dbase.select_entered_requests(current_id)
-    print(sent_persons)
-    print(entered_persons)
     for sent_row in sent_persons:
         requests['sent'].append({
             'name': sent_row[0],
@@ -409,4 +414,4 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(host='10.72.15.45', port=5000)
+    app.run(host='localhost', port=5000)  # 10.72.15.45
