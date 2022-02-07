@@ -12,7 +12,8 @@
                     <div class="column is-two-thirds">
                         {% if open and not own %}
                         <figure class="image is-square">
-                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
+                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image"
+                                class="person-image-box">
                         </figure>
                         {% else %}
                         {% for part, path in data.paths.items() -%}

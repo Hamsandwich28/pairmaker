@@ -1,0 +1,17 @@
+{% extends 'base.html' -%}
+
+{% block content -%}
+{% include 'flash.html' %}
+
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            {{ message }}
+        </p>
+        <p class="subtitle">
+            <a href="{{ back }}" class="button is-primary">Вернуться</a>
+        </p>
+    </div>
+</section>
+
+{% endblock content -%}

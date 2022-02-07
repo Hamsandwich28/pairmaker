@@ -131,6 +131,11 @@ button.next {
     top: 0;
 }
 
+.person-image-box {
+    max-width: 340px;
+    max-height: 340px;
+}
+
 /* view-page */
 
 button.view-page {

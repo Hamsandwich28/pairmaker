@@ -2,6 +2,7 @@
 
 {% block content -%}
 
+<p class="has-text-centered is-size-4 mb-2">Вам были подобраны лучшие персоны исходя из анкеты</p>
 <div class="vp-wrap my-3">
     {% for person in persons -%}
     <a href="/person-page/{{ person.id }}">

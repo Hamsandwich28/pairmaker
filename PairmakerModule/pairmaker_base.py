@@ -162,12 +162,14 @@ def quest_block_2():
 
 @app.route('/quest-block-3', methods=['GET', 'POST'])
 def quest_block_3():
+    navbar = {'loggedin': True, 'formcomplete': False}
     if request.method == 'POST':
         hobby = _request_form_getter(request, 'hobby')
         if not any(hobby):
             flash('Ответьте на каждый вопрос', category='is-warning')
             return render_template('quest-block-3.html',
-                                   title='Блок вопросов')
+                                   title='Блок вопросов',
+                                   navbar=navbar)
         answers_paste = {'sportattitude': request.form.get('sportattitude')}
         answers_paste.update(_key_values_dict(hobby, 'hobby', 2))
         dbase.update_table_from_dict_by_user_id(
@@ -175,7 +177,6 @@ def quest_block_3():
         )
         return redirect(url_for('quest_block_4'))
 
-    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-3.html',
                            title='Блок вопросов',
                            navbar=navbar)
@@ -183,13 +184,15 @@ def quest_block_3():
 
 @app.route('/quest-block-4', methods=['GET', 'POST'])
 def quest_block_4():
+    navbar = {'loggedin': True, 'formcomplete': False}
     if request.method == 'POST':
         movie = _request_form_getter(request, 'movieattitude')
         lit = _request_form_getter(request, 'litattitude')
         if not any(movie) or not any(lit):
             flash('Ответьте на каждый вопрос', category='is-warning')
             return render_template('quest-block-4.html',
-                                   title='Блок вопросов')
+                                   title='Блок вопросов',
+                                   navbar=navbar)
         answers_paste = {}
         answers_paste.update(_key_values_dict(movie, 'movieattitude', 2))
         answers_paste.update(_key_values_dict(lit, 'litattitude', 2))
@@ -198,7 +201,6 @@ def quest_block_4():
         )
         return redirect(url_for('quest_block_5'))
 
-    navbar = {'loggedin': True, 'formcomplete': False}
     return render_template('quest-block-4.html',
                            title='Блок вопросов',
                            navbar=navbar)
@@ -380,6 +382,30 @@ def enter_request_accept_requests():
     if dbase.update_users_relations(current_user.get_id(), user_id):
         return jsonify({'accepted': True})
     return jsonify({'accepted': False})
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    navbar = {'loggedin': False, 'formcomplete': False, 'backid': current_user.get_id()}
+    backurl = request.args.get('next') or url_for('index')
+    msg = 'Данной страницы не существует, пожалуйста вернитесь назад'
+    return render_template('error.html',
+                           title='Что то пошло не так',
+                           message=msg,
+                           back=backurl,
+                           navbar=navbar), 404
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    navbar = {'loggedin': False, 'formcomplete': False, 'backid': current_user.get_id()}
+    backurl = request.args.get('next') or url_for('index')
+    msg = 'Пожалуйста, вернитесь на предыдущую страницу'
+    return render_template('error.html',
+                           title='Что то пошло не так',
+                           message=msg,
+                           back=backurl,
+                           navbar=navbar), 500
 
 
 if __name__ == '__main__':

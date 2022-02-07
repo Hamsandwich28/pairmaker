@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function (event) {
+window.addEventListener("load", function (event) {
     var contentDiv = document.querySelector('#content');
     var preloadDiv = document.querySelector('#preload');
     contentDiv.setAttribute('class', 'isVisible');
