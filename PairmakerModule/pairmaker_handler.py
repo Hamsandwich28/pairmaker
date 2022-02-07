@@ -5,7 +5,7 @@ from typing import Optional
 from pairmaker_answer_stringify import NumberToString
 
 # '(https?://[^\"\s>]+)'
-masks = ['https://vk.com/', 'https://instagram.com/', r'(\d{11})']
+masks = ['https://vk.com/', 'https://www.instagram.com/', r'(\d{11})']
 amount = {
     'beard': 4,
     'brows': 20,
