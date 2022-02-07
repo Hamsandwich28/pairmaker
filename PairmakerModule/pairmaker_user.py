@@ -29,6 +29,7 @@ class User(UserMixin):
 
     @classmethod
     def userify(cls, data):
+        print(data)
         if type(data) is dict:
             return data
         elif type(data) in [tuple, list]:

@@ -254,7 +254,7 @@ def quest_block_5_upload():
 @app.route('/userava/<int:user_id>')
 @login_required
 def userava(user_id: int):
-    image: memoryview = dbase.select_user_avatar_by_id_force(user_id)
+    image: memoryview = dbase.select_user_avatar_by_id(user_id)
     image = image.tobytes()
     h = make_response(image)
     h.headers['Content-Type'] = 'image/png'

@@ -1,5 +1,7 @@
+import os
 import psycopg2
 import configparser
+
 
 from typing import Optional
 
@@ -23,15 +25,22 @@ class Database:
         params = dict(config['Database'])
         return psycopg2.connect(**params)
 
+    @property
+    def cur(self):
+        if not self.__cur or self.__cur.closed:
+            self.__db = self._reconnect()
+            self.__cur = self.__db.cursor()
+        return self.__cur
+
     def _insert_empty_to_form_table(self, user_id: int) -> None:
         """Установка записи ответов - изначально с пустыми полями"""
         sql = f"INSERT INTO form(id) VALUES(%s);"
-        self.__cur.execute(sql, user_id)
+        self.cur.execute(sql, user_id)
 
     def _insert_empty_to_identikit_table(self, user_id: int) -> None:
         """Установка записи ответов - изначально с пустыми полями"""
         sql = f"INSERT INTO identikit(id) VALUES(%s);"
-        self.__cur.execute(sql, user_id)
+        self.cur.execute(sql, user_id)
 
     def insert_new_user(self, firstname: str, login: str, passhash: str) -> bool:
         """Запрос на вставку новой записи пользователя"""
@@ -40,8 +49,8 @@ class Database:
             INSERT INTO users (firstname, login, passhash)
             VALUES(%s, %s, %s)
             RETURNING id;"""
-            self.__cur.execute(sql, (firstname, login, passhash))
-            new_user_id = self.__cur.fetchone()
+            self.cur.execute(sql, (firstname, login, passhash))
+            new_user_id = self.cur.fetchone()
             self._insert_empty_to_form_table(new_user_id)
             self._insert_empty_to_identikit_table(new_user_id)
             self.__db.commit()
@@ -59,7 +68,7 @@ class Database:
             VALUES
             (%s, %s, %s),
             (%s, %s, %s);"""
-            self.__cur.execute(sql, (ourid, theirid, 1, theirid, ourid, -1))
+            self.cur.execute(sql, (ourid, theirid, 1, theirid, ourid, -1))
             self.__db.commit()
             return True
 
@@ -72,8 +81,8 @@ class Database:
         """Выборка записи пользователя по id"""
         try:
             sql = f"SELECT * FROM users WHERE id = {user_id};"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if res:
                 return res
 
@@ -85,8 +94,8 @@ class Database:
         """Выборка записи пользователя по логину"""
         try:
             sql = f"SELECT * FROM users WHERE login = '{user_login}';"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if res:
                 return res
 
@@ -98,8 +107,8 @@ class Database:
         """Получение мужчина ли пользователь по id"""
         try:
             sql = f"SELECT ismale FROM users WHERE id = {user_id};"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             return bool(res[0])
 
         except psycopg2.Error as e:
@@ -112,8 +121,8 @@ class Database:
         """Получение всех данных из таблицы по id"""
         try:
             sql = f"SELECT * FROM {table} WHERE id = {user_id};"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if res:
                 return res
 
@@ -130,8 +139,8 @@ class Database:
             SELECT * FROM form 
             WHERE id <> {user_id}
             LIMIT {limit} OFFSET {offset};"""
-            self.__cur.execute(sql)
-            res = self.__cur.fetchall()
+            self.cur.execute(sql)
+            res = self.cur.fetchall()
             return res or []
 
         except psycopg2.Error as e:
@@ -141,8 +150,8 @@ class Database:
     def select_user_avatar_by_id(self, user_id: int) -> Optional[memoryview]:
         try:
             sql = f"SELECT avatar FROM users WHERE id = {user_id};"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if res:
                 return res[0]
 
@@ -150,30 +159,30 @@ class Database:
             print('Ошибка чтения пользователя -> ', e)
         return None
 
-    def select_user_avatar_by_id_force(self, user_id: int) -> Optional[memoryview]:
-        sql = f"SELECT avatar FROM users WHERE id = {user_id};"
-        while True:
-            try:
-                self.__cur.execute(sql)
-                res = self.__cur.fetchone()
-                if res:
-                    return res[0]
-
-            except psycopg2.InterfaceError:
-                if self.__db.close():
-                    self.__db = self._reconnect()
-                self.__cur = self.__db.cursor()
-                continue
-
-            except psycopg2.Error as e:
-                print('Ошибка чтения пользователя -> ', e)
-        return None
+    # def select_user_avatar_by_id_force(self, user_id: int) -> Optional[memoryview]:
+    #     sql = f"SELECT avatar FROM users WHERE id = {user_id};"
+    #     while True:
+    #         try:
+    #             self.cur.execute(sql)
+    #             res = self.cur.fetchone()
+    #             if res:
+    #                 return res[0]
+    #
+    #         except psycopg2.InterfaceError:
+    #             if self.__db.close():
+    #                 self.__db = self._reconnect()
+    #             self.cur = self.__db.cursor()
+    #             continue
+    #
+    #         except psycopg2.Error as e:
+    #             print('Ошибка чтения пользователя -> ', e)
+    #     return None
 
     def select_user_relations(self, ourid: int) -> list:
         try:
             sql = f"SELECT theirid, status FROM relations WHERE ourid = {ourid};"
-            self.__cur.execute(sql)
-            res = list(self.__cur.fetchall())
+            self.cur.execute(sql)
+            res = list(self.cur.fetchall())
             return res
         except psycopg2.Error as e:
             print('Ошибка чтения записей отношений -> ', e)
@@ -185,8 +194,8 @@ class Database:
             SELECT r.ourid, u.firstname
             FROM relations AS r JOIN users AS u ON r.ourid = u.id
             WHERE theirid = {ourid} AND status = 1;"""
-            self.__cur.execute(sql)
-            res = list(self.__cur.fetchall())
+            self.cur.execute(sql)
+            res = list(self.cur.fetchall())
             return res
 
         except psycopg2.Error as e:
@@ -200,8 +209,8 @@ class Database:
             FROM users AS u
             JOIN identikit AS i ON u.id = i.id
             WHERE u.id = {user_id};"""
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             return res
 
         except psycopg2.Error as e:
@@ -215,8 +224,8 @@ class Database:
             FROM relations AS r 
             JOIN users AS u ON u.id = r.ourid
             WHERE r.theirid = {user_id} AND status > -1;"""
-            self.__cur.execute(sql)
-            res = self.__cur.fetchall()
+            self.cur.execute(sql)
+            res = self.cur.fetchall()
             return res
 
         except psycopg2.Error as e:
@@ -230,8 +239,8 @@ class Database:
             FROM relations AS r 
             JOIN users AS u ON u.id = r.ourid
             WHERE r.theirid = {user_id} AND status < 0;"""
-            self.__cur.execute(sql)
-            res = self.__cur.fetchall()
+            self.cur.execute(sql)
+            res = self.cur.fetchall()
             return res
 
         except psycopg2.Error as e:
@@ -241,8 +250,8 @@ class Database:
     def check_user_exist(self, user_id: int) -> bool:
         try:
             sql = f"SELECT id FROM users WHERE id = {user_id};"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if res:
                 return True
 
@@ -255,8 +264,8 @@ class Database:
             sql = f"""
             SELECT status FROM relations
             WHERE (ourid = {user_id_one} AND theirid = {user_id_two});"""
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             if not res:
                 return False
             if (res[0] + 4) % 2 == 0:
@@ -269,8 +278,8 @@ class Database:
     def check_profiles_amount(self) -> Optional[int]:
         try:
             sql = f"SELECT COUNT(*) FROM users;"
-            self.__cur.execute(sql)
-            res = self.__cur.fetchone()
+            self.cur.execute(sql)
+            res = self.cur.fetchone()
             return res[0]
 
         except psycopg2.Error as e:
@@ -286,7 +295,7 @@ class Database:
                              for k, v in answers.items()])
         try:
             sql = f"""UPDATE {table} SET {set_str} WHERE id = {user_id};"""
-            self.__cur.execute(sql)
+            self.cur.execute(sql)
             self.__db.commit()
             return True
 
@@ -302,7 +311,7 @@ class Database:
             link_inst = '{links[1] or 'NULL'}',
             link_num = '{links[2] or 'NULL'}'
             WHERE id = {user_id};"""
-            self.__cur.execute(sql)
+            self.cur.execute(sql)
             self.__db.commit()
             return True
 
@@ -317,7 +326,7 @@ class Database:
         binary = psycopg2.Binary(image)
         try:
             sql = f"UPDATE users SET avatar = %s WHERE id = %s;"
-            self.__cur.execute(sql, (binary, user_id))
+            self.cur.execute(sql, (binary, user_id))
             self.__db.commit()
             return True
 
@@ -333,7 +342,7 @@ class Database:
             brows = NULL, eyes = NULL, hair = NULL,
             lips = NULL, nose = NULL, beard = NULL, addition = NULL
             WHERE id = {user_id};"""
-            self.__cur.execute(sql)
+            self.cur.execute(sql)
             self.__db.commit()
             return True
 
@@ -352,8 +361,8 @@ class Database:
             UPDATE relations SET
             status = -2
             WHERE (ourid = {ourid} AND theirid = {theirid});"""
-            self.__cur.execute(sql1)
-            self.__cur.execute(sql2)
+            self.cur.execute(sql1)
+            self.cur.execute(sql2)
             self.__db.commit()
             return True
 
