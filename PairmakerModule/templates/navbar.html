@@ -1,7 +1,7 @@
 <nav class="navbar is-light mb-6" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+            <img src="{{ url_for('static', filename='img/ico/ico1.png') }}" width="160" height="40">
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -30,7 +30,7 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
-                    {% if navbar.formcomplete %}
+                    {% if navbar.formcomplete and navbar.backid %}
                     <a class="button is-primary" href="/person-page/{{ navbar.backid }}">
                         <strong>Мой профиль</strong>
                     </a>

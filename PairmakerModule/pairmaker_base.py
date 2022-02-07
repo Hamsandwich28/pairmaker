@@ -313,7 +313,6 @@ def view_page():
     limit, cap, req_stage = 50, 50, 3
     profiles_rows = dbase.check_profiles_amount()
     offset = random.randint(0, max(0, profiles_rows - limit))
-    print(offset)
     current_id = current_user.get_id()
     selector = UserSelector(dbase.select_all_data_from_table_by_id(current_user.get_id(), 'form'))
     while True:
@@ -324,7 +323,7 @@ def view_page():
                 person_ids.append(person[0])
                 person_stages.append(stage)
 
-        if len(person_ids) >= 50 or len(persons_dump) < limit:
+        if len(person_ids) >= limit or len(persons_dump) < limit:
             break
         offset += limit
 

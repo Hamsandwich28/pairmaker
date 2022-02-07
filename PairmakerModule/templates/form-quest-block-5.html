@@ -6,8 +6,7 @@
         <div class="column is-three-quarters">
             <div id="file-js-example" class="file is-fullwidth is-info has-name">
                 <label class="file-label">
-                    <input class="file-input" type="file"
-                    name="file" accept="image/jpeg, image/png" required >
+                    <input class="file-input" type="file" name="file" accept="image/jpeg, image/png" required>
                     <span class="file-cta">
                         <span class="file-icon">
                             <i class="fas fa-upload"></i>
@@ -29,6 +28,11 @@
     <div class="columns mb-1">
         <div class="column"></div>
         <div class="column is-three-quarters">
+            <div class="my-2">
+                <img src="{{ url_for('static', filename='img/ico/social/vk.png') }}" width="40" height="40">
+                <img src="{{ url_for('static', filename='img/ico/social/inst.png') }}" width="40" height="40">
+                <img src="{{ url_for('static', filename='img/ico/social/tel.png') }}" width="40" height="40">
+            </div>
             <div class="my-2">
                 <label for="">Ссылка на вконтакте
                     <input class="input" type="text" placeholder="https://vk.com/" name="link_vk">
