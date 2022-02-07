@@ -231,7 +231,7 @@ def quest_block_5_upload():
             flash('Некорректная ссылка, повторите ввод', category='is-warning')
             return redirect(url_for('quest_block_5'))
 
-    if file and _check_img_format(file.filename):
+    if file and _check_img_format(file.filename) and file.content_length <= 3 * 1024 * 1024:
         try:
             image = file.read()
         except FileNotFoundError:
@@ -399,6 +399,12 @@ def page_not_found(e):
                            message=msg,
                            back=backurl,
                            navbar=navbar), 404
+
+
+@app.errorhandler(413)
+def page_not_found(e):
+    flash('Файл слишком большого объема', category='is-warning')
+    return redirect(url_for('quest_block_5'))
 
 
 @app.errorhandler(500)

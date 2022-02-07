@@ -1,4 +1,6 @@
 import psycopg2
+import configparser
+
 from typing import Optional
 
 
@@ -11,8 +13,15 @@ class Database:
         return cls.db_instance
 
     def __init__(self, db):
-        self.__db = db
-        self.__cur = db.cursor()
+        self.__db: psycopg2.connection = db
+        self.__cur: psycopg2.cursor = db.cursor()
+
+    def _reconnect(self):
+        conf_name = 'settings.ini'
+        config = configparser.ConfigParser()
+        config.read(os.path.join(os.path.dirname(os.path.realpath(__file__)), conf_name))
+        params = dict(config['Database'])
+        return psycopg2.connect(**params)
 
     def _insert_empty_to_form_table(self, user_id: int) -> None:
         """Установка записи ответов - изначально с пустыми полями"""
@@ -151,6 +160,8 @@ class Database:
                     return res[0]
 
             except psycopg2.InterfaceError:
+                if self.__db.close():
+                    self.__db = self._reconnect()
                 self.__cur = self.__db.cursor()
                 continue
 
