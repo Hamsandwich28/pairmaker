@@ -141,6 +141,23 @@ class Database:
             print('Ошибка чтения пользователя -> ', e)
         return None
 
+    def select_user_avatar_by_id_force(self, user_id: int) -> Optional[memoryview]:
+        sql = f"SELECT avatar FROM users WHERE id = {user_id};"
+        while True:
+            try:
+                self.__cur.execute(sql)
+                res = self.__cur.fetchone()
+                if res:
+                    return res[0]
+
+            except psycopg2.InterfaceError:
+                self.__cur = self.__db.cursor()
+                continue
+
+            except psycopg2.Error as e:
+                print('Ошибка чтения пользователя -> ', e)
+        return None
+
     def select_user_relations(self, ourid: int) -> list:
         try:
             sql = f"SELECT theirid, status FROM relations WHERE ourid = {ourid};"

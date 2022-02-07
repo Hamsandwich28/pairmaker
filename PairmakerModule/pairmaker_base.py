@@ -254,7 +254,7 @@ def quest_block_5_upload():
 @app.route('/userava/<int:user_id>')
 @login_required
 def userava(user_id: int):
-    image: memoryview = dbase.select_user_avatar_by_id(user_id)
+    image: memoryview = dbase.select_user_avatar_by_id_force(user_id)
     image = image.tobytes()
     h = make_response(image)
     h.headers['Content-Type'] = 'image/png'
@@ -403,7 +403,7 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def page_not_found(e):
-    navbar = {'loggedin': False, 'formcomplete': False, 'backid': current_user.get_id()}
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': None}
     backurl = request.args.get('next') or url_for('index')
     msg = 'Пожалуйста, вернитесь на предыдущую страницу'
     return render_template('error.html',
