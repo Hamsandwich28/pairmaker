@@ -8,8 +8,9 @@
         <p class="title">
             {{ message }}
         </p>
-        <p class="subtitle">
+        <p class="subtitle mt-3">
             <a href="{{ back }}" class="button is-primary">Вернуться</a>
+            <a href="{{ url_for('logout') }}" class="button is-primary">Выйти из профиля</a>
         </p>
     </div>
 </section>

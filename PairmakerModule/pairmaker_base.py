@@ -387,7 +387,7 @@ def enter_request_accept_requests():
 @app.errorhandler(404)
 def page_not_found(e):
     navbar = {'loggedin': False, 'formcomplete': False, 'backid': current_user.get_id()}
-    backurl = request.args.get('next') or url_for('index')
+    backurl = request.args.get('next')
     msg = 'Данной страницы не существует, пожалуйста вернитесь назад'
     return render_template('error.html',
                            title='Что то пошло не так',
