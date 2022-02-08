@@ -7,16 +7,12 @@ from typing import Optional
 
 
 class Database:
-    db_instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not cls.db_instance:
-            cls.db_instance = super().__new__(cls)
-        return cls.db_instance
-
     def __init__(self, db):
-        self.__db: psycopg2.connection = db
-        self.__cur: psycopg2.cursor = db.cursor()
+        self.__db = db
+        self.__cur = db.cursor()
+
+    def __del__(self):
+        self.__db.close()
 
     def _reconnect(self):
         conf_name = 'settings.ini'
@@ -79,16 +75,13 @@ class Database:
 
     def select_user_by_id(self, user_id: int) -> Optional[tuple]:
         """Выборка записи пользователя по id"""
-        try:
-            sql = f"SELECT * FROM users WHERE id = {user_id};"
-            self.cur.execute(sql)
-            res = self.cur.fetchone()
+        with self.__db.cursor() as curs:
+            sql = f"SELECT * FROM users WHERE id = '{user_id}';"
+            curs.execute(sql)
+            res = curs.fetchone()
             if res:
                 return res
-
-        except psycopg2.Error as e:
-            print('Ошибка чтения пользователя -> ', e)
-        return None
+            return None
 
     def select_user_by_login(self, user_login: str) -> Optional[tuple]:
         """Выборка записи пользователя по логину"""
@@ -158,25 +151,6 @@ class Database:
         except psycopg2.Error as e:
             print('Ошибка чтения пользователя -> ', e)
         return None
-
-    # def select_user_avatar_by_id_force(self, user_id: int) -> Optional[memoryview]:
-    #     sql = f"SELECT avatar FROM users WHERE id = {user_id};"
-    #     while True:
-    #         try:
-    #             self.cur.execute(sql)
-    #             res = self.cur.fetchone()
-    #             if res:
-    #                 return res[0]
-    #
-    #         except psycopg2.InterfaceError:
-    #             if self.__db.close():
-    #                 self.__db = self._reconnect()
-    #             self.cur = self.__db.cursor()
-    #             continue
-    #
-    #         except psycopg2.Error as e:
-    #             print('Ошибка чтения пользователя -> ', e)
-    #     return None
 
     def select_user_relations(self, ourid: int) -> list:
         try:
