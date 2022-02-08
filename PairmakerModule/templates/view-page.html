@@ -2,6 +2,7 @@
 
 {% block content -%}
 
+{% if available and persons %}
 <p class="has-text-centered is-size-4 mb-2">Вам были подобраны лучшие персоны исходя из анкеты</p>
 <div class="vp-wrap my-3">
     {% for person in persons -%}
@@ -20,5 +21,19 @@
     </a>
     {% endfor -%}
 </div>
+{% elif available %}
+<p class="has-text-centered is-size-4 mb-2">Персон нет</p>
+{% else %}
+<section class="hero is-info">
+    <div class="hero-body">
+        <p class="title">
+            Возвращайтесь 14 февраля
+        </p>
+        <p class="subtitle">
+            Мы уже сейчас собираем для тебя наиболее подходящих пользователей
+        </p>
+    </div>
+</section>
+{% endif %}
 
 {% endblock content -%}
