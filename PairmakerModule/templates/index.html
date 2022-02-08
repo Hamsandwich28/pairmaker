@@ -24,9 +24,33 @@
             </div>
             <button class="modal-close is-large" aria-label="close"></button>
         </div>
+
+        <div id="modal-start" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <section class="modal-card-body">
+                    <p>
+                        Привет, Тензоровец! Настало время открывать свои сердца для настоящих друзей и единомышленников!
+                        Согласись, приятно, когда новый знакомый так же, как и ты любит смотреть ужастики или кататься
+                        на
+                        сноуборде.
+                    </p>
+
+                    <p>Говоришь нереально? Мы все устроим! ГО!</p>
+                    <img src="{{ url_for('static', filename='img/ico/guzeeva.png') }}">
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Продолжить</button>
+                </footer>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
     </div>
     <div class="column"></div>
 </div>
 
+<script>
+    let needOpen = "{{ modal }}";
+</script>
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock content -%}

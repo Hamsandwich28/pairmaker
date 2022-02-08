@@ -74,10 +74,12 @@ def index():
             return redirect(url_for('person_page', user_id=current_user.get_id()))
         return redirect(url_for('quest_block_1'))
 
+    modal = True
     navbar = {'loggedin': False}
     return render_template('index.html',
                            title='Начало',
-                           navbar=navbar)
+                           navbar=navbar,
+                           modal=modal)
 
 
 @app.route('/login', methods=['POST'])

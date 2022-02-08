@@ -42,4 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
             closeAllModals();
         }
     });
+
+    if (needOpen) {
+        openModal(document.querySelector('#modal-start'));
+    }
 });

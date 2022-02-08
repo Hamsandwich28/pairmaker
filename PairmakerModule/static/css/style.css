@@ -28,6 +28,11 @@
     min-width: 480px;
 }
 
+.width-620 {
+    min-width: 620px;
+    max-width: 620px;
+}
+
 .invisible {
     visibility: hidden;
 }
