@@ -29,15 +29,22 @@
             <div class="modal-background"></div>
             <div class="modal-card">
                 <section class="modal-card-body">
-                    <p>
-                        Привет, Тензоровец! Настало время открывать свои сердца для настоящих друзей и единомышленников!
-                        Согласись, приятно, когда новый знакомый так же, как и ты любит смотреть ужастики или кататься
-                        на
-                        сноуборде.
-                    </p>
-
-                    <p>Говоришь нереально? Мы все устроим! ГО!</p>
-                    <img src="{{ url_for('static', filename='img/ico/guzeeva.png') }}">
+                    <section class="hero is-info">
+                        <div class="hero-body">
+                            <p class="title">
+                                Привет, Тензоровец!
+                            </p>
+                            <p class="subtitle">
+                                Настало время открывать свои сердца для настоящих друзей и единомышленников!
+                                Согласись, приятно, когда новый знакомый так же, как и ты любит смотреть ужастики или
+                                кататься на сноуборде.
+                                Говоришь нереально? Мы все устроим! ГО!
+                            </p>
+                        </div>
+                    </section>
+                    <div class="is-flex is-justify-content-center">
+                        <img src="{{ url_for('static', filename='img/ico/guzeeva.png') }}">
+                    </div>
                 </section>
                 <footer class="modal-card-foot">
                     <button class="button is-info">Продолжить</button>
