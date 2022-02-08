@@ -1,4 +1,5 @@
 import os
+import re
 import random
 import datetime
 import psycopg2
@@ -12,7 +13,7 @@ from pairmaker_user import User
 from pairmaker_database import Database
 from pairmaker_utils import UserSelector
 from pairmaker_answer_stringify import NumberToString, IdentikitPathBuilder
-from pairmaker_handler import _key_values_dict, _check_img_format, _request_form_getter, _check_link_format, \
+from pairmaker_handler import _key_values_dict, _check_img_format, _request_form_getter, \
     _request_identikit_parser, _get_base_data_str, _get_form_data_str, _get_kit_data_str, amount
 
 # config
@@ -49,13 +50,6 @@ def get_db():
 @login_manage.user_loader
 def load_user(user_id):
     return User().load_from_db(user_id, get_db())
-
-
-# @app.before_request
-# def before_request():
-#     global dbase
-#     db = get_db()
-#     dbase = Database(db)
 
 
 @app.teardown_appcontext
@@ -109,8 +103,14 @@ def register():
     firstname = request.form.get('firstname')
     login = request.form.get('login')
     password = request.form.get('password')
-    if len(firstname) < 2 or len(login) < 6 or len(password) < 6:
-        flash('Некорректные данные полей', category='is-warning')
+    if len(firstname) < 2:
+        flash('Некорректные данные полей - имя должно содержать два и больше символов',
+              category='is-warning')
+        return redirect(url_for('index'))
+
+    if len(login) < 6 or len(password) < 6:
+        flash('Некорректные данные полей - логин и пароль должны содержать шесть и больше символов',
+              category='is-warning')
         return redirect(url_for('index'))
 
     if get_db().insert_new_user(firstname, login, generate_password_hash(password)):
@@ -217,6 +217,7 @@ def quest_block_5():
 
 @app.route('/quest-block-5', methods=['POST'])
 def quest_block_5_upload():
+    pattern = r'(\d{11})'
     file = request.files.get('file')
     link_vk = request.form.get('link_vk')
     link_inst = request.form.get('link_inst')
@@ -225,10 +226,19 @@ def quest_block_5_upload():
         flash('Укажите хотя бы одну ссылку', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
-    for link in [link_vk, link_inst, link_num]:
-        if link and not _check_link_format(link):
-            flash('Некорректная ссылка, повторите ввод', category='is-warning')
-            return redirect(url_for('quest_block_5'))
+    if (
+            link_vk and 'https://vk.com/' not in link_vk or
+            link_inst and 'https://www.instagram.com/' not in link_inst
+    ):
+        flash('Некорректная ссылка, повторите ввод', category='is-warning')
+        return redirect(url_for('quest_block_5'))
+
+    if (
+            link_num and
+            link_num[0] == '+' and re.match(pattern, link_num[1:]) or re.match(pattern, link_num)
+    ):
+        flash('Неверный формат номера телефона', category='is-warning')
+        return redirect(url_for('quest_block_5'))
 
     if file and _check_img_format(file.filename) and file.content_length <= 3 * 1024 * 1024:
         try:
@@ -237,7 +247,7 @@ def quest_block_5_upload():
             flash('Изображение не найдено', category='is-warning')
             return redirect(url_for('quest_block_5'))
     else:
-        flash('Некорректное изображение - требуется png формат', category='is-warning')
+        flash('Некорректное изображение - требуется png или jpg формат', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
     current_id = current_user.get_id()
@@ -247,7 +257,7 @@ def quest_block_5_upload():
     ):
         flash('Не удалось загрузить данные', category='is-warning')
         return redirect(url_for('quest_block_5'))
-    return redirect(url_for('person_page', user_id=current_user.get_id()))
+    return redirect(url_for('person_page', user_id=current_id))
 
 
 @app.route('/userava/<int:user_id>')
@@ -307,7 +317,7 @@ def person_page_send():
 @app.route('/view-page')
 @login_required
 def view_page():
-    available = datetime.date.today() > datetime.date(2022, 2, 14)
+    available = datetime.date.today() >= datetime.date(2022, 2, 14)
     person_ids, person_stages = [], []
     limit, cap, req_stage = 50, 50, 3
     profiles_rows = get_db().check_profiles_amount()

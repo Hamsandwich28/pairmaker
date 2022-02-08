@@ -4,8 +4,6 @@ from typing import Optional
 
 from pairmaker_answer_stringify import NumberToString
 
-# '(https?://[^\"\s>]+)'
-masks = ['https://vk.com/', 'https://www.instagram.com/', r'(\d{11})']
 amount = {
     'beard': 4,
     'brows': 20,
@@ -49,12 +47,6 @@ def _request_form_getter(req: flask.Request, keyword: str) -> list:
 
 def _request_identikit_parser(req: flask.Request) -> dict:
     return {k: v for k, v in req.form.items()}
-
-
-def _check_link_format(link: str) -> bool:
-    if masks[0] in link or masks[1] in link or re.match(masks[2], link):
-        return True
-    return False
 
 
 def _get_base_data_str(base_data: tuple) -> dict:

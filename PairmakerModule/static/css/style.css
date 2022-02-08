@@ -17,6 +17,10 @@
 
 /* forms */
 
+.min-width-480 {
+    min-width: 480px;
+}
+
 .invisible {
     visibility: hidden;
 }

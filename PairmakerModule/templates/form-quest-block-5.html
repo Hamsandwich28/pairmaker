@@ -3,7 +3,7 @@
     <p class="has-text-centered is-size-4 mt-3">Загрузите своё настоящее фото</p>
     <div class="columns mb-3">
         <div class="column"></div>
-        <div class="column is-three-quarters">
+        <div class="column is-three-quarters min-width-480">
             <div id="file-js-example" class="file is-fullwidth is-info has-name">
                 <label class="file-label">
                     <input class="file-input" type="file" name="file" accept="image/jpeg, image/png" required>
@@ -16,7 +16,7 @@
                         </span>
                     </span>
                     <span class="file-name">
-                        Файл не выбран...
+                        Файл не больше 3Мб
                     </span>
                 </label>
             </div>
@@ -40,12 +40,13 @@
             </div>
             <div class="my-2">
                 <label for="">Ссылка на инстраграм
-                    <input class="input" type="text" placeholder="https://instagram.com/" name="link_inst">
+                    <input class="input" type="text" placeholder="https://www.instagram.com/" name="link_inst">
                 </label>
             </div>
             <div class="my-2">
                 <label for="">Номер телефона
-                    <input class="input" type="text" placeholder="88004441818" name="link_num">
+                    <input class="input" type="text"
+                    placeholder="88004441818 или +78004441818" name="link_num">
                 </label>
             </div>
         </div>
