@@ -8,11 +8,18 @@
 }
 
 .isVisible {
-    display: block !important;
+    overflow: hidden;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .isHidden {
     display: none !important;
+}
+
+.main-footer {
+    margin-top: auto;
 }
 
 /* forms */

@@ -1,52 +1,54 @@
-<nav class="navbar is-light mb-6" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item">
-            <img src="{{ url_for('static', filename='img/ico/ico1.png') }}" width="160" height="40">
-        </a>
+<header class="main-header">
+    <nav class="navbar is-light mb-6" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item">
+                <img src="{{ url_for('static', filename='img/ico/ico1.png') }}" width="160" height="40">
+            </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <div class="navbar-item">
-                <div class="buttons">
-                    {% if navbar.formcomplete %}
-                    <a class="button is-light" href="/view-page">
-                        <strong>Поиск</strong>
-                    </a>
-                    <a class="button is-primary" href="/enter-requests">
-                        <strong>Заявки</strong>
-                    </a>
-                    {% endif %}
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        {% if navbar.formcomplete %}
+                        <a class="button is-light" href="/view-page">
+                            <strong>Поиск</strong>
+                        </a>
+                        <a class="button is-primary" href="/enter-requests">
+                            <strong>Заявки</strong>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        {% if navbar.formcomplete and navbar.backid %}
+                        <a class="button is-primary" href="/person-page/{{ navbar.backid }}">
+                            <strong>Мой профиль</strong>
+                        </a>
+                        {% endif %}
+                        {% if navbar.loggedin %}
+                        <a class="button is-light" href="{{ url_for('logout') }}">
+                            Выйти из профиля
+                        </a>
+                        {% else %}
+                        <a class="button is-primary js-modal-trigger" data-target="modal-js-example">
+                            <strong>Авторизоваться</strong>
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <div class="buttons">
-                    {% if navbar.formcomplete and navbar.backid %}
-                    <a class="button is-primary" href="/person-page/{{ navbar.backid }}">
-                        <strong>Мой профиль</strong>
-                    </a>
-                    {% endif %}
-                    {% if navbar.loggedin %}
-                    <a class="button is-light" href="{{ url_for('logout') }}">
-                        Выйти из профиля
-                    </a>
-                    {% else %}
-                    <a class="button is-primary js-modal-trigger"
-                    data-target="modal-js-example">
-                        <strong>Авторизоваться</strong>
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+    </nav>
+</header>
