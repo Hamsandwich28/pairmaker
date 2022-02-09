@@ -111,11 +111,19 @@
                 </div>
                 <div class="column is-one-third"></div>
                 <div class="column">
+                    {% if available %}
                     <a href="/view-page">
                         <button class="button is-danger is-fullwidth">
                             <span>Поиск</span>
                         </button>
                     </a>
+                    {% else %}
+                    <a href="#">
+                        <button class="button is-danger is-fullwidth" disabled>
+                            <span>Возвращайся 14 февраля</span>
+                        </button>
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -277,6 +277,9 @@ def person_page(user_id: int):
 
     available = datetime.datetime(2022, 2, 14, 3) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 20)
     current_id = current_user.get_id()
+    if current_id != user_id and not available:
+        return redirect(url_for('person_page', user_id=current_id))
+
     base_user_data = get_db().select_all_data_from_table_by_id(user_id, 'users')
     identikit_data = get_db().select_all_data_from_table_by_id(user_id, 'identikit')
     form_data = get_db().select_all_data_from_table_by_id(user_id, 'form')
@@ -295,7 +298,7 @@ def person_page(user_id: int):
         own_profile = False
         open_profile = get_db().check_profile_open(current_id, user_id)
 
-    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id, 'available': available}
     return render_template('person-page.html',
                            title='Страница пользователя',
                            own=own_profile,
@@ -303,7 +306,7 @@ def person_page(user_id: int):
                            data=data,
                            id=int(user_id),
                            navbar=navbar,
-                           available=True)
+                           available=available)
 
 
 @app.route('/person-page-send', methods=['POST'])
@@ -351,18 +354,19 @@ def view_page():
             )
         })
     persons.sort(key=lambda x: x['stage'], reverse=True)
-    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id, 'available': available}
     return render_template('view-page.html',
                            title='Ищу пару',
                            persons=persons,
                            selfid=current_id,
                            navbar=navbar,
-                           available=True)
+                           available=available)
 
 
 @app.route('/enter-requests')
 @login_required
 def enter_requests():
+    available = datetime.datetime(2022, 2, 14, 3) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 20)
     requests = {'sent': [], 'entered': []}
     current_id = current_user.get_id()
     sent_persons = get_db().select_sent_requests(current_id)
@@ -381,7 +385,7 @@ def enter_requests():
         })
     requests['sent'].sort(key=lambda x: x['status'], reverse=True)
     requests['entered'].sort(key=lambda x: x['status'], reverse=True)
-    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id}
+    navbar = {'loggedin': True, 'formcomplete': True, 'backid': current_id, 'available': available}
     return render_template('enter-requests.html',
                            title='Запросы',
                            requests=requests,
