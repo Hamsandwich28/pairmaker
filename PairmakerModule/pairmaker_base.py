@@ -1,5 +1,4 @@
 import os
-import re
 import random
 import datetime
 import psycopg2
@@ -219,7 +218,6 @@ def quest_block_5():
 
 @app.route('/quest-block-5', methods=['POST'])
 def quest_block_5_upload():
-    pattern = r'(\d{11})'
     file = request.files.get('file')
     link_vk = request.form.get('link_vk')
     link_inst = request.form.get('link_inst')
@@ -235,12 +233,10 @@ def quest_block_5_upload():
         flash('Некорректная ссылка, повторите ввод', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
-    if (
-            link_num and
-            link_num[0] == '+' and re.match(pattern, link_num[1:]) or re.match(pattern, link_num)
-    ):
-        flash('Неверный формат номера телефона', category='is-warning')
-        return redirect(url_for('quest_block_5'))
+    for sym in link_num:
+        if sym not in '+0123456789':
+            flash('Неверный формат номера телефона', category='is-warning')
+            return redirect(url_for('quest_block_5'))
 
     if file and _check_img_format(file.filename) and file.content_length <= 3 * 1024 * 1024:
         try:
