@@ -275,6 +275,7 @@ def person_page(user_id: int):
         flash('Данного пользователя не существует', category='is-warning')
         return redirect(url_for('person_page', user_id=current_user.get_id()))
 
+    available = datetime.datetime(2022, 2, 14, 3) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 20)
     current_id = current_user.get_id()
     base_user_data = get_db().select_all_data_from_table_by_id(user_id, 'users')
     identikit_data = get_db().select_all_data_from_table_by_id(user_id, 'identikit')
@@ -301,7 +302,8 @@ def person_page(user_id: int):
                            open=open_profile,
                            data=data,
                            id=int(user_id),
-                           navbar=navbar)
+                           navbar=navbar,
+                           available=True)
 
 
 @app.route('/person-page-send', methods=['POST'])
@@ -315,7 +317,7 @@ def person_page_send():
 @app.route('/view-page')
 @login_required
 def view_page():
-    available = datetime.date.today() >= datetime.date(2022, 2, 14)
+    available = datetime.datetime(2022, 2, 14, 3) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 20)
     person_ids, person_stages = [], []
     limit, cap, req_stage = 50, 50, 3
     profiles_rows = get_db().check_profiles_amount()
