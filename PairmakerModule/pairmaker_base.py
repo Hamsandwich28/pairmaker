@@ -18,7 +18,7 @@ from pairmaker_handler import _key_values_dict, _check_img_format, _request_form
 # config
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '533899465101462ae6122972'
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 # database config
 conf_name = 'settings.ini'
@@ -238,7 +238,7 @@ def quest_block_5_upload():
             flash('Неверный формат номера телефона', category='is-warning')
             return redirect(url_for('quest_block_5'))
 
-    if file and _check_img_format(file.filename) and file.content_length <= 3 * 1024 * 1024:
+    if file and _check_img_format(file.filename) and file.content_length <= 5 * 1024 * 1024:
         try:
             image = file.read()
         except FileNotFoundError:
