@@ -31,9 +31,12 @@ def _key_values_dict(obj: list, basename: str, amount: int) -> dict:
 
 
 def _check_img_format(filename: str) -> bool:
-    ext = filename.split('.', 1)[1]
-    if ext.lower() in ['png', 'jpg']:
-        return True
+    try:
+        ext = filename.split('.')[-1]
+        if ext.lower() in ['png', 'jpg']:
+            return True
+    except Exception:
+        pass
     return False
 
 
