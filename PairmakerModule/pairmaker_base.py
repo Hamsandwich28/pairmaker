@@ -275,7 +275,7 @@ def person_page(user_id: int):
         flash('Данного пользователя не существует', category='is-warning')
         return redirect(url_for('person_page', user_id=current_user.get_id()))
 
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or True
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
     current_id = current_user.get_id()
     if current_id != user_id and not available:
         return redirect(url_for('person_page', user_id=current_id))
@@ -320,9 +320,9 @@ def person_page_send():
 @app.route('/view-page')
 @login_required
 def view_page():
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or True
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
     person_ids, person_stages = [], []
-    limit, cap, req_stage = 50, 50, 0
+    limit, cap, req_stage = 50, 50, 3
     profiles_rows = get_db().check_profiles_amount()
     offset = random.randint(0, max(0, profiles_rows - limit))
     current_id = current_user.get_id()
@@ -366,7 +366,7 @@ def view_page():
 @app.route('/enter-requests')
 @login_required
 def enter_requests():
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or True
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
     requests = {'sent': [], 'entered': []}
     current_id = current_user.get_id()
     sent_persons = get_db().select_sent_requests(current_id)
