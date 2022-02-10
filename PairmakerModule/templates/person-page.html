@@ -1,15 +1,16 @@
 {% extends 'base.html' -%}
 
 {% block content -%}
-
+{% include 'flash.html' %}
 <div class="card">
     <div class="card-image has-text-centered person-image-card">
-        <img src="/static/img/brows/m/brows9.png" alt="template" style="visibility: hidden;">
+        
         {% if open and not own %}
         <figure class="image is-square">
             <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image" class="person-image-box">
         </figure>
         {% else %}
+        <img src="/static/img/brows/m/brows9.png" alt="template" style="visibility: hidden;">
         {% for part, path in data.paths.items() -%}
         <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="template"
             class="{{ part }}_kit person-image">

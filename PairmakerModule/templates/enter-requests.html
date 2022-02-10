@@ -4,6 +4,7 @@
 {% include 'flash.html' %}
 
 <div class="column is-half-desktop is-full-mobile is-four-fifths-tablet">
+    {% include 'flash.html' %}
     {% if requests.sent %}
     {% for req in requests.sent -%}
     <section class="hero is-info">

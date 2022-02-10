@@ -133,6 +133,7 @@ input[type="radio"]:checked + label > figure {
 
 .image-check {
     visibility: hidden;
+    display: none;
 }
 
 /* person-page */
@@ -144,6 +145,7 @@ input[type="radio"]:checked + label > figure {
 .person-image-box {
     max-width: 340px;
     max-height: 340px;
+    margin: auto;
 }
 
 .person-image {
@@ -161,13 +163,19 @@ button.view-page {
     border: none;
 }
 
+.vp-a {
+    display: flex;
+    flex-basis: 280px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
 .vp-wrap {
-    min-width: 800px;
-    width: 940px;
+    min-width: 0;
+    max-width: 940px;
     display: flex;
     flex-direction: row!important;
     flex-wrap: wrap!important;
-    flex-flow: row;
     justify-content: center;
     margin: 0 auto;
 }
@@ -190,4 +198,21 @@ button.view-page {
     position: absolute;
     top: 0px;
     left: 0px;
+}
+
+.identikit-wrap-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.identikit-wrap-column-image {
+    flex-basis: 300px;
+}
+
+.identikit-wrap-column-select {
+    flex-basis: 460px;
+    max-width: 100%;
+    min-width: 0;
+    flex-grow: 1;
 }

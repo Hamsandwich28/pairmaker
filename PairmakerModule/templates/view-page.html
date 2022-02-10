@@ -2,13 +2,14 @@
 
 {% block content -%}
 
-<div class="column is-half-desktop is-full-mobile is-four-fifths-tablet">
+<div class="column is-full-desktop is-full-mobile is-full-tablet">
+    {% include 'flash.html' %}
 
     {% if available and persons %}
     <p class="has-text-centered is-size-4 mb-2">Вам были подобраны лучшие персоны исходя из анкеты</p>
     <div class="vp-wrap my-3">
         {% for person in persons -%}
-        <a href="/person-page/{{ person.id }}">
+        <a href="/person-page/{{ person.id }}" class="vp-a">
             <div class="card vp-card">
                 <div class="card-image vp-image-card">
                     {% for part, path in person.paths.items() -%}
@@ -23,6 +24,7 @@
         </a>
         {% endfor -%}
     </div>
+
     {% elif available %}
     <p class="has-text-centered is-size-4 mb-2">Персон нет</p>
     {% else %}
@@ -37,6 +39,7 @@
         </div>
     </section>
     {% endif %}
+
 </div>
 
 {% endblock content -%}

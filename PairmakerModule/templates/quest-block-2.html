@@ -3,8 +3,9 @@
 {% block content -%}
 
 <div class="column is-four-fifths-desktop is-full-mobile is-full-tablet">
+    {% include 'flash.html' %}
     <div class="columns is-centered">
-        <div class="column is-one-third-desktop is-full-mobile">
+        <div class="column ml-3">
             <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
                 <ul>
                     <li><a>Основное</a></li>
@@ -16,8 +17,8 @@
             </nav>
         </div>
     </div>
-    <div class="columns">
-        <div class="column is-one-third-desktop is-full-mobile is-full-tablet">
+    <div class="identikit-wrap-columns">
+        <div class="identikit-wrap-column-image">
             <div class="card mx-2">
                 <div class="card-image">
                     {% for key, value in amount.items() -%}
@@ -49,7 +50,7 @@
                 </footer>
             </div>
         </div>
-        <div class="column is-two-third-desktop is-full-mobile is-full-tablet">
+        <div class="identikit-wrap-column-select">
             <div class="card mx-2">
                 <p class="is-size-4 has-text-centered py-3">Составьте свой аватар</p>
                 <div class="tabs is-boxed is-fullwidth is-medium">
