@@ -2,31 +2,25 @@
 
 {% block content -%}
 
-<div class="columns">
-    <div class="column"></div>
-    <div class="column is-half min-width-480">
-        <div class="mx-auto">
-            <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
-                <ul>
-                    <li class="is-active"><a class="has-text-weight-bold">Основное</a></li>
-                    <li><a>Аватар</a></li>
-                    <li><a>Хобби</a></li>
-                    <li><a>Вкусы</a></li>
-                    <li><a>Ссылки</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="card my-4">
-            <div class="card-content">
-                
-                <div class="content">
-                    {% include 'form-quest-block-1.html' %}
-                </div>
+<div class="column is-one-third-desktop is-full-mobile is-two-thirds-tablet">
+    <div class="mx-auto">
+        <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+            <ul>
+                <li class="is-active"><a class="has-text-weight-bold">Основное</a></li>
+                <li><a>Аватар</a></li>
+                <li><a>Хобби</a></li>
+                <li><a>Вкусы</a></li>
+                <li><a>Ссылки</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="card my-4 is-half">
+        <div class="card-content">
+            <div class="content">
+                {% include 'form-quest-block-1.html' %}
             </div>
         </div>
-
     </div>
-    <div class="column"></div>
 </div>
 
 {% endblock content -%}

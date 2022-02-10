@@ -2,38 +2,41 @@
 
 {% block content -%}
 
-{% if available and persons %}
-<p class="has-text-centered is-size-4 mb-2">Вам были подобраны лучшие персоны исходя из анкеты</p>
-<div class="vp-wrap my-3">
-    {% for person in persons -%}
-    <a href="/person-page/{{ person.id }}">
-        <div class="card vp-card">
-            <div class="card-image vp-image-card">
-                {% for part, path in person.paths.items() -%}
-                <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="Placeholder image"
-                    class="{{ part }}_kit vp-image-pos">
-                {% endfor -%}
+<div class="column is-half-desktop is-full-mobile is-four-fifths-tablet">
+
+    {% if available and persons %}
+    <p class="has-text-centered is-size-4 mb-2">Вам были подобраны лучшие персоны исходя из анкеты</p>
+    <div class="vp-wrap my-3">
+        {% for person in persons -%}
+        <a href="/person-page/{{ person.id }}">
+            <div class="card vp-card">
+                <div class="card-image vp-image-card">
+                    {% for part, path in person.paths.items() -%}
+                    <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="Placeholder image"
+                        class="{{ part }}_kit vp-image-pos">
+                    {% endfor -%}
+                </div>
+                <div class="content">
+                    <p class="has-text-centered is-size-4 mb-2">{{ person.name | title }}</p>
+                </div>
             </div>
-            <div class="content">
-                <p class="has-text-centered is-size-4 mb-2">{{ person.name | title }}</p>
-            </div>
-        </div>
-    </a>
-    {% endfor -%}
-</div>
-{% elif available %}
-<p class="has-text-centered is-size-4 mb-2">Персон нет</p>
-{% else %}
-<section class="hero is-info">
-    <div class="hero-body">
-        <p class="title">
-            Возвращайтесь 14 февраля
-        </p>
-        <p class="subtitle">
-            Мы уже сейчас собираем для тебя наиболее подходящих пользователей
-        </p>
+        </a>
+        {% endfor -%}
     </div>
-</section>
-{% endif %}
+    {% elif available %}
+    <p class="has-text-centered is-size-4 mb-2">Персон нет</p>
+    {% else %}
+    <section class="hero is-info">
+        <div class="hero-body">
+            <p class="title">
+                Возвращайтесь 14 февраля
+            </p>
+            <p class="subtitle">
+                Мы уже сейчас собираем для тебя наиболее подходящих пользователей
+            </p>
+        </div>
+    </section>
+    {% endif %}
+</div>
 
 {% endblock content -%}

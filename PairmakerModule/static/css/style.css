@@ -49,53 +49,65 @@ input[type="radio"]:checked + label > figure {
 
 /* REBUILD */
 
-button.tablinks {
-    width: 130px;
+.min-width-navbar {
+    min-width: 500px;
 }
 
-button.next {
-    width: 400px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-.person-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.mainbox {
-    width: 1310px;
-    height: 860px;
+.person-image-card {
+    position: relative;
+    margin: 0 auto;
 }
 
 .identikit {
+    min-height: 430px;
     width: 400px;
-    height: 440px;
+    height: 430px;
     position: relative;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
 }
 
-.selectbox {
-    width: 1200px;
-    height: 800px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+.button-margin {
+    margin-top: 345px;
+}
+/* 
+.select-box {
+    width: 870px;
+    height: 650px;
+} */
+
+.select-box::-webkit-scrollbar, .tabs::-webkit-scrollbar {
+    width: 12px;
+    background-color: aliceblue;
     border-radius: 20px;
+}
+
+.select-box::-webkit-scrollbar-track, .tabs::-webkit-scrollbar-track {
+    background: none;
+}
+
+.select-box {
+    overflow-y: scroll;
+}
+
+.select-image label {
+    flex-basis: 150px;
+    flex-shrink: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgkit {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translate(-50%, 0);
 }
 
 .tabcontent {
     display: none;
     flex-wrap: wrap;
     align-content: center;
-}
-
-.imgkit {
-    position: absolute;
-    left: 18px;
-    top: 36px;
 }
 
 .cross {
@@ -107,28 +119,16 @@ button.next {
     z-index: 0;
 }
 
-.beard_kit {
-    z-index: 1;
-}
-
-.eyes_kit {
-    z-index: 1;
-}
-
-.nose_kit {
-    z-index: 1;
-}
-
-.lips_kit {
-    z-index: 1;
-}
-
-.brows_kit {
+.beard_kit, .eyes_kit, .nose_kit, .lips_kit {
     z-index: 2;
 }
 
+.brows_kit {
+    z-index: 4;
+}
+
 .addition_kit {
-    z-index: 3;
+    z-index: 6;
 }
 
 .image-check {
@@ -138,18 +138,20 @@ button.next {
 /* person-page */
 
 .person-images-box {
-    position: relative;
     height: 400px;
-}
-
-.person-image {
-    position: absolute;
-    top: 0;
 }
 
 .person-image-box {
     max-width: 340px;
     max-height: 340px;
+}
+
+.person-image {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
 }
 
 /* view-page */

@@ -2,30 +2,25 @@
 
 {% block content -%}
 
-<div class="columns is-mobile">
-    <div class="column"></div>
-    <div class="column is-three-quarters min-width-480">
-        <div class="mx-auto">
-            <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
-                <ul>
-                    <li><a>Основное</a></li>
-                    <li><a>Аватар</a></li>
-                    <li class="is-active"><a class="has-text-weight-bold">Хобби</a></li>
-                    <li><a>Вкусы</a></li>
-                    <li><a>Ссылки</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="card my-4">
-            <div class="card-content">
-                <div class="content">
-                    {% include 'form-quest-block-3.html' %}
-                </div>
+
+<div class="column is-half-desktop is-full-mobile is-four-fifths-tablet">
+    <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+        <ul>
+            <li><a>Основное</a></li>
+            <li><a>Аватар</a></li>
+            <li class="is-active"><a class="has-text-weight-bold">Хобби</a></li>
+            <li><a>Вкусы</a></li>
+            <li><a>Ссылки</a></li>
+        </ul>
+    </nav>
+
+    <div class="card my-4">
+        <div class="card-content">
+            <div class="content">
+                {% include 'form-quest-block-3.html' %}
             </div>
         </div>
-
     </div>
-    <div class="column"></div>
 </div>
 
 <script src="{{ url_for('static', filename='js/quest-block-3.js') }}"></script>

@@ -2,133 +2,115 @@
 
 {% block content -%}
 
-<div class="columns is-mobile">
-    <div class="column"></div>
-    <div class="column is-two-thirds">
-        <div class="card width-620">
-            <div class="card-image p-5 person-images-box">
-                <div class="columns is-mobile">
-                    <div class="column"></div>
-                    <div class="column is-two-thirds">
-                        {% if open and not own %}
-                        <figure class="image is-square">
-                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image"
-                                class="person-image-box">
-                        </figure>
-                        {% else %}
-                        {% for part, path in data.paths.items() -%}
-                        <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="template"
-                            class="{{ part }}_kit person-image">
-                        {% endfor -%}
-                        {% endif %}
-                    </div>
-                    <div class="column"></div>
-                </div>
+<div class="card">
+    <div class="card-image has-text-centered person-image-card">
+        <img src="/static/img/brows/m/brows9.png" alt="template" style="visibility: hidden;">
+        {% if open and not own %}
+        <figure class="image is-square">
+            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image" class="person-image-box">
+        </figure>
+        {% else %}
+        {% for part, path in data.paths.items() -%}
+        <img src="{{ url_for('static', filename='{}'.format(path)) }}" alt="template"
+            class="{{ part }}_kit person-image">
+        {% endfor -%}
+        {% endif %}
+    </div>
+    <hr>
+    <div class="card-content">
+        <div class="media">
+            <div class="media-left">
+                {% if own %}
+                <figure class="image is-96x96">
+                    <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
+                </figure>
+                {% endif %}
             </div>
-            <hr>
-            <div class="card-content">
-                <div class="media">
-                    <div class="media-left">
-                        {% if own %}
-                        <figure class="image is-96x96">
-                            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
-                        </figure>
-                        {% endif %}
-                    </div>
-                    <div class="media-content">
-                        <p class="title is-4">{{ data.present.name }}</p>
-                        {% if own or open %}
-                        <table class="table is-fullwidth">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        {% if data.present.links.link_vk.value != 'NULL' %}
-                                        <a href="{{ data.present.links.link_vk.value }}">
-                                            {{ data.present.links.link_vk.title }}
-                                        </a>
-                                        {% else %}
-                                        <p>{{ data.present.links.link_vk.title }}</p>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if data.present.links.link_inst.value != 'NULL' %}
-                                        <a href="{{ data.present.links.link_inst.value }}">
-                                            {{ data.present.links.link_inst.title }}
-                                        </a>
-                                        {% else %}
-                                        <p>{{ data.present.links.link_inst.title }}</p>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if data.present.links.link_num.value != 'NULL' %}
-                                        <p>{{ data.present.links.link_num.value }}</p>
-                                        {% else %}
-                                        <p>{{ data.present.links.link_num.title }}</p>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {% endif %}
-                    </div>
-                </div>
+            <div class="media-content">
+                <p class="title is-4">{{ data.present.name }}</p>
+                {% if own or open %}
+                <table class="table is-fullwidth">
+                    <tbody>
+                        <tr>
+                            <td>
+                                {% if data.present.links.link_vk.value != 'NULL' %}
+                                <a href="{{ data.present.links.link_vk.value }}">
+                                    {{ data.present.links.link_vk.title }}
+                                </a>
+                                {% else %}
+                                <p>{{ data.present.links.link_vk.title }}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if data.present.links.link_inst.value != 'NULL' %}
+                                <a href="{{ data.present.links.link_inst.value }}">
+                                    {{ data.present.links.link_inst.title }}
+                                </a>
+                                {% else %}
+                                <p>{{ data.present.links.link_inst.title }}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if data.present.links.link_num.value != 'NULL' %}
+                                <p>{{ data.present.links.link_num.value }}</p>
+                                {% else %}
+                                <p>{{ data.present.links.link_num.title }}</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
             </div>
         </div>
-
-        <div class="card width-620">
-            <div class="card-content">
-                <div class="content">
-                    <table class="table is-stripped is-hoverable">
-                        <tbody>
-                            {% for field in data.form.values() -%}
-                            <tr>
-                                <td><span>{{ field.title }}</span></td>
-                                <td><span>{{ field.value }}</span></td>
-                            </tr>
-                            {% endfor -%}
-                        </tbody>
-                    </table>
-                </div>
+        <div class="content">
+            <table class="table is-stripped is-hoverable">
+                <tbody>
+                    {% for field in data.form.values() -%}
+                    <tr>
+                        <td><span>{{ field.title }}</span></td>
+                        <td><span>{{ field.value }}</span></td>
+                    </tr>
+                    {% endfor -%}
+                </tbody>
+            </table>
+        </div>
+        <div class="columns mx-4 mb-2">
+            <div class="column">
+                {% if own %}
+                <a href="{{ url_for('enter_requests') }}">
+                    <button type="button" class="button is-warning is-fullwidth">
+                        Заявки
+                    </button>
+                </a>
+                {% elif open %}
+                <button class="button is-warning is-fullwidth" type="button" disabled>
+                    Заявка принята
+                </button>
+                {% else %}
+                <button class="button is-warning is-fullwidth" id="sendButton" onclick="sendRequest(this.id, userId);">
+                    <span>Хочу общаться</span>
+                </button>
+                {% endif %}
             </div>
-            <div class="columns mx-4 mb-2">
-                <div class="column">
-                    {% if own %}
-                    <a href="{{ url_for('enter_requests') }}">
-                        <button type="button" class="button is-warning is-fullwidth">
-                            Заявки
-                        </button>
-                    </a>
-                    {% elif open %}
-                    <button class="button is-warning is-fullwidth" type="button" disabled>
-                        Заявка принята
+            <div class="column is-one-third"></div>
+            <div class="column">
+                {% if available %}
+                <a href="/view-page">
+                    <button class="button is-danger is-fullwidth">
+                        <span>Поиск</span>
                     </button>
-                    {% else %}
-                    <button class="button is-warning is-fullwidth" id="sendButton"
-                        onclick="sendRequest(this.id, userId);">
-                        <span>Хочу общаться</span>
+                </a>
+                {% else %}
+                <a href="#">
+                    <button class="button is-danger is-fullwidth" disabled>
+                        <span>Возвращайся 14 февраля</span>
                     </button>
-                    {% endif %}
-                </div>
-                <div class="column is-one-third"></div>
-                <div class="column">
-                    {% if available %}
-                    <a href="/view-page">
-                        <button class="button is-danger is-fullwidth">
-                            <span>Поиск</span>
-                        </button>
-                    </a>
-                    {% else %}
-                    <a href="#">
-                        <button class="button is-danger is-fullwidth" disabled>
-                            <span>Возвращайся 14 февраля</span>
-                        </button>
-                    </a>
-                    {% endif %}
-                </div>
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>
-    <div class="column"></div>
 </div>
 
 <script>

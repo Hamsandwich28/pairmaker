@@ -17,26 +17,20 @@
 
 <body>
     <div id="preload">
-        <div class="columns">
-            <div class="column"></div>
+        <div class="columns is-mobile is-centered">
             <div class="column is-half">
                 <progress class="progress is-large is-info" max="100">60%</progress>
             </div>
-            <div class="column"></div>
         </div>
-
     </div>
+
     <div id="content" class="main-page">
         {% block basecontent -%}
         {% include 'navbar.html' %}
-        <div class="columns is-mobile">
-            <div class="column"></div>
-            <div class="column is-half">
-                {% include 'flash.html' %}
-                {% block content -%}
-                {% endblock content -%}
-            </div>
-            <div class="column"></div>
+        
+        <div class="columns is-mobile is-centered">
+            {% block content -%}
+            {% endblock content -%}
         </div>
         {% include 'footer.html' %}
         {% endblock basecontent -%}
