@@ -404,8 +404,7 @@ def enter_request_accept_requests():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    navbar = {'loggedin': False, 'formcomplete': False, 'backid': current_user.get_id()}
-    backurl = request.args.get('next')
+    navbar = {'loggedin': False, 'formcomplete': False}
     msg = 'Данной страницы не существует, пожалуйста вернитесь назад'
     return render_template('error.html',
                            title='Что то пошло не так',
@@ -422,13 +421,11 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def page_not_found(e):
-    navbar = {'loggedin': True, 'formcomplete': True, 'backid': None}
-    backurl = request.args.get('next') or url_for('index')
+    navbar = {'loggedin': True, 'formcomplete': True}
     msg = 'Пожалуйста, вернитесь на предыдущую страницу'
     return render_template('error.html',
                            title='Что то пошло не так',
                            message=msg,
-                           back=backurl,
                            navbar=navbar), 500
 
 

@@ -8,10 +8,8 @@
             {{ message }}
         </p>
         <p class="subtitle mt-3">
-            {% if back %}
-            <a href="{{ back }}" class="button is-primary">Вернуться</a>
-            {% endif %}
-            <a href="{{ url_for('logout') }}" class="button is-primary">Выйти из профиля</a>
+            <a class="button is-primary" href="javascript:history.go(-1)">Вернуться</a>
+            <a href="{{ url_for('logout') }}" class="button is-primary">Выйти на главную</a>
         </p>
     </div>
 </section>
