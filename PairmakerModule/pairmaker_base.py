@@ -409,7 +409,6 @@ def page_not_found(e):
     return render_template('error.html',
                            title='Что то пошло не так',
                            message=msg,
-                           back=backurl,
                            navbar=navbar), 404
 
 
