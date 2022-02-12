@@ -30,6 +30,7 @@ login_manage = LoginManager(app)
 login_manage.login_view = 'index'
 login_manage.login_message = 'Пожалуйста, авторизуйтесь на сайте'
 login_manage.login_message_category = 'is-warning'
+level = False
 
 
 # database connectors
@@ -273,10 +274,9 @@ def userava(user_id: int):
 @login_required
 def person_page(user_id: int):
     if not get_db().check_user_exist(user_id):
-        flash('Данного пользователя не существует', category='is-warning')
         return redirect(url_for('person_page', user_id=current_user.get_id()))
 
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or level
     current_id = current_user.get_id()
     if current_id != user_id and not available:
         return redirect(url_for('person_page', user_id=current_id))
@@ -288,6 +288,9 @@ def person_page(user_id: int):
         _get_kit_data_str(identikit_data),
         bool(base_user_data[4])
     )
+    if user_id == current_id and not base_user_data[7]:
+        flash('Вы не заполнили форму доконца', category='is-warning')
+        return redirect(url_for('quest_block_1'))
     data = {
         'paths': image_paths,
         'present': _get_base_data_str(base_user_data),
@@ -321,7 +324,7 @@ def person_page_send():
 @app.route('/view-page')
 @login_required
 def view_page():
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or level
     person_ids, person_stages = [], []
     limit, cap, req_stage = 50, 50, 3
     profiles_rows = get_db().check_profiles_amount()
@@ -367,7 +370,7 @@ def view_page():
 @app.route('/enter-requests')
 @login_required
 def enter_requests():
-    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18)
+    available = datetime.datetime(2022, 2, 14, 1) <= datetime.datetime.now() <= datetime.datetime(2022, 2, 21, 18) or level
     requests = {'sent': [], 'entered': []}
     current_id = current_user.get_id()
     sent_persons = get_db().select_sent_requests(current_id)
