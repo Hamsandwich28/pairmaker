@@ -1,9 +1,6 @@
 {% extends 'base.html' -%}
 
 {% block content -%}
-<!-- <div class="columns is-centered is-mobile">
-    <div class="column is-desktop-two-thirds is-mobile-full is-tablet-three-quarters"> -->
-
 <div class="column is-half-desktop is-full-mobile is-four-fifths-tablet">
     {% include 'flash.html' %}
     <div class="card my-5">
@@ -32,17 +29,22 @@
         <div class="modal-background"></div>
         <div class="modal-card">
             <section class="modal-card-body">
-                <section class="hero is-info">
+                <section class="hero">
                     <div class="hero-body">
-                        <p class="title">
-                            Привет, Тензоровец!
-                        </p>
-                        <p class="subtitle">
-                            Настало время открывать свои сердца для настоящих друзей и единомышленников!
-                            Согласись, приятно, когда новый знакомый так же, как и ты, любит смотреть ужастики или
-                            кататься на сноуборде.
-                            Говоришь нереально? Мы все устроим! ГО!
-                        </p>
+                        <div class="container has-text-centered">
+                            <p class="title has-text-grey-light">
+                                Привет, Тензоровец!
+                            </p>
+                            <br/>
+                            <p class="subtitle has-text-grey-light">
+                                Если ты здесь, значит готов к поиску близких по духу и интересам людей. Это правильное
+                                решение! Любишь смотреть ужасы, слушать зажигательную музыку, вышивать узоры или
+                                кататься на
+                                сноуборде? Отлично! Настало время открыть своё сердце новым знакомствам. Жми
+                                «продолжить» и
+                                погнали
+                            </p>
+                        </div>
                     </div>
                 </section>
                 <div class="is-flex is-justify-content-center">
@@ -56,11 +58,6 @@
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
 </div>
-
-
-
-<!-- </div>
-</div> -->
 
 <script>
     let needOpen = "{{ modal }}";
