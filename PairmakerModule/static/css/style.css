@@ -77,11 +77,16 @@ input[type="radio"]:checked + label > figure {
 .select-box::-webkit-scrollbar, .tabs::-webkit-scrollbar {
     width: 12px;
     background-color: aliceblue;
-    border-radius: 20px;
 }
 
 .select-box::-webkit-scrollbar-track, .tabs::-webkit-scrollbar-track {
     background: none;
+}
+
+.select-box::-webkit-scrollbar-thumb, .tabs::-webkit-scrollbar-thumb {
+    background-color: lightblue;
+    border-radius: 20px;
+    border: 1px solid #48575e;
 }
 
 .select-box {

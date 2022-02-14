@@ -13,7 +13,8 @@ from pairmaker_database import Database
 from pairmaker_utils import UserSelector
 from pairmaker_answer_stringify import NumberToString, IdentikitPathBuilder
 from pairmaker_handler import _key_values_dict, _check_img_format, _request_form_getter, \
-    _request_identikit_parser, _get_base_data_str, _get_form_data_str, _get_kit_data_str, amount
+    _request_identikit_parser, _get_base_data_str, _get_form_data_str, _get_kit_data_str, amount, \
+    sqlescape, check_link_on_sql
 
 # config
 app = Flask(__name__)
@@ -87,6 +88,24 @@ def index():
 def login():
     login = request.form.get('login')
     password = request.form.get('password')
+
+    if not check_link_on_sql(login) or not check_link_on_sql(password):
+        flash('Некорректные данные полей',
+              category='is-warning')
+        return redirect(url_for('index'))
+
+    for sym in login:
+        if not sym.isalnum():
+            flash('Некорректные данные полей', category='is-warning')
+            return redirect(url_for('index'))
+
+    for sym in password:
+        if not sym.isalnum():
+            flash('Некорректные данные полей', category='is-warning')
+            return redirect(url_for('index'))
+
+    login = sqlescape(login)
+    password = sqlescape(password)
     userdata = User.userify(get_db().select_user_by_login(login))
     if userdata and check_password_hash(userdata['passhash'], password):
         userlogin = User().create(userdata)
@@ -116,6 +135,29 @@ def register():
               category='is-warning')
         return redirect(url_for('index'))
 
+    for sym in login:
+        if not sym.isalnum():
+            flash('Некорректные данные полей', category='is-warning')
+            return redirect(url_for('index'))
+
+    for sym in firstname:
+        if not sym.isalnum():
+            flash('Некорректные данные полей', category='is-warning')
+            return redirect(url_for('index'))
+
+    for sym in password:
+        if not sym.isalnum():
+            flash('Некорректные данные полей', category='is-warning')
+            return redirect(url_for('index'))
+
+    if not check_link_on_sql(firstname) or not check_link_on_sql(login) \
+            or not check_link_on_sql(password):
+        flash('Некорректные данные полей', category='is-warning')
+        return redirect(url_for('index'))
+
+    firstname = sqlescape(firstname)
+    login = sqlescape(login)
+    password = sqlescape(password)
     if get_db().insert_new_user(firstname, login, generate_password_hash(password)):
         userdata = User.userify(get_db().select_user_by_login(login))
         userlogin = User().create(userdata)
@@ -235,6 +277,10 @@ def quest_block_5_upload():
         flash('Некорректная ссылка, повторите ввод', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
+    if not check_link_on_sql(link_vk) or not check_link_on_sql(link_inst):
+        flash('Некорректная ссылка, повторите ввод', category='is-warning')
+        return redirect(url_for('quest_block_5'))
+
     for sym in link_num:
         if sym not in '+0123456789':
             flash('Неверный формат номера телефона', category='is-warning')
@@ -249,6 +295,9 @@ def quest_block_5_upload():
     else:
         flash('Некорректное изображение - требуется png или jpg формат', category='is-warning')
         return redirect(url_for('quest_block_5'))
+
+    link_vk = sqlescape(link_vk)
+    link_inst = sqlescape(link_inst)
 
     current_id = current_user.get_id()
     if not (
