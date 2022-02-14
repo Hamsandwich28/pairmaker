@@ -216,3 +216,18 @@ button.view-page {
     min-width: 0;
     flex-grow: 1;
 }
+
+/* Последние правки */
+
+img.person-image-real {
+    object-fit: cover;
+    width: 300px;
+    height: 300px;
+}
+
+img.person-image-mini {
+    object-fit: cover;
+    width: 96px;
+    height: 96px;
+}
+

@@ -7,7 +7,7 @@
         
         {% if open and not own %}
         <figure class="image is-square">
-            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image" class="person-image-box">
+            <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image" class="person-image-box person-image-real">
         </figure>
         {% else %}
         <img src="/static/img/brows/m/brows9.png" alt="template" style="visibility: hidden;">
@@ -22,8 +22,8 @@
         <div class="media">
             <div class="media-left">
                 {% if own %}
-                <figure class="image is-96x96">
-                    <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image">
+                <figure class="image is-square is-96x96">
+                    <img src="{{ url_for('userava', user_id=id) }}" alt="Placeholder image" class="is-rounded person-image-mini">
                 </figure>
                 {% endif %}
             </div>
