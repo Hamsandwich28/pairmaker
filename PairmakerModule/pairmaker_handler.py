@@ -25,9 +25,9 @@ def check_link_on_sql(link: str) -> bool:
         "drop", "drop column", "drop constraint", "drop database", "drop default", "drop index", "drop table",
         "drop view", "exec", "exists", "foreign key", "from", "full outer join", "group by", "having", "index",
         "inner join", "insert into", "insert into select", "is null", "is not null", "join", "left join",
-        "limit", "not null", "order by", "outer join", "primary key", "procedure", "right join", "rownum", "select",
-        "select distinct", "select into", "select top", "table", "truncate table", "union", "union all", "unique",
-        "update", "values", "view", "where", "version"
+        "limit", "not null", "order by", "outer join", "primary key", "procedure", "postgre", "postgres", "postgresql",
+        "right join", "rownum", "select", "select distinct", "select into", "select top", "table", "truncate table",
+        "union", "union all", "unique", "update", "values", "view", "where", "version"
     ]
     link = link.lower()
     for sql in sql_words:
