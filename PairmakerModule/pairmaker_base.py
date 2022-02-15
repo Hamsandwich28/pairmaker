@@ -90,18 +90,17 @@ def login():
     password = request.form.get('password')
 
     if not check_link_on_sql(login) or not check_link_on_sql(password):
-        flash('Некорректные данные полей',
-              category='is-warning')
+        flash('Некорректные данные полей - используются недопустимые символы для полей ввода', category='is-warning')
         return redirect(url_for('index'))
 
     for sym in login:
         if not sym.isalnum():
-            flash('Некорректные данные полей', category='is-warning')
+            flash('Некорректные данные полей - используются недопустимые символы для логина', category='is-warning')
             return redirect(url_for('index'))
 
     for sym in password:
-        if not sym.isalnum():
-            flash('Некорректные данные полей', category='is-warning')
+        if not sym.isalnum() and sym not in "!@#$%^&*()_.,?~":
+            flash('Некорректные данные полей - используются недопустимые символы для пароля', category='is-warning')
             return redirect(url_for('index'))
 
     login = sqlescape(login)
@@ -137,22 +136,22 @@ def register():
 
     for sym in login:
         if not sym.isalnum():
-            flash('Некорректные данные полей', category='is-warning')
+            flash('Некорректные данные полей - используются недопустимые символы для логина', category='is-warning')
             return redirect(url_for('index'))
 
     for sym in firstname:
         if not sym.isalnum():
-            flash('Некорректные данные полей', category='is-warning')
+            flash('Некорректные данные полей - используются недопустимые символы для имени', category='is-warning')
             return redirect(url_for('index'))
 
     for sym in password:
-        if not sym.isalnum():
-            flash('Некорректные данные полей', category='is-warning')
+        if not sym.isalnum() and sym not in "!@#$%^&*()_.,?~":
+            flash('Некорректные данные полей - используются недопустимые символы для пароля', category='is-warning')
             return redirect(url_for('index'))
 
     if not check_link_on_sql(firstname) or not check_link_on_sql(login) \
             or not check_link_on_sql(password):
-        flash('Некорректные данные полей', category='is-warning')
+        flash('Некорректные данные полей - используются недопустимые символы для полей ввода', category='is-warning')
         return redirect(url_for('index'))
 
     firstname = sqlescape(firstname)
@@ -278,7 +277,7 @@ def quest_block_5_upload():
         return redirect(url_for('quest_block_5'))
 
     if not check_link_on_sql(link_vk) or not check_link_on_sql(link_inst):
-        flash('Некорректная ссылка, повторите ввод', category='is-warning')
+        flash('Некорректная символы в ссылке, повторите ввод', category='is-warning')
         return redirect(url_for('quest_block_5'))
 
     for sym in link_num:

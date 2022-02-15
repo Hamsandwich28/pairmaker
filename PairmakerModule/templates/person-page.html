@@ -28,7 +28,7 @@
                 {% endif %}
             </div>
             <div class="media-content">
-                <p class="title is-4">{{ data.present.name }}</p>
+                <p class="title is-4">{{ data.present.name | title }}</p>
                 {% if own or open %}
                 <table class="table is-fullwidth">
                     <tbody>

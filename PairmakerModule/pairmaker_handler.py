@@ -19,16 +19,15 @@ def check_link_on_sql(link: str) -> bool:
     if link == "":
         return True
     sql_words = [
-        "add", "add constraint", "alter", "alter column", "alter table", "all", "and", "any", "as", "asc",
-        "backup database", "between", "case", "check", "column", "constraint", "create", "create database",
-        "create index", "create or replace view", "create table", "create procedure", "create unique index",
-        "create view", "database", "default", "delete", "desc", "distinct", "drop", "drop column",
-        "drop constraint", "drop database", "drop default", "drop index", "drop table", "drop view",
-        "exec", "exists", "foreign key", "from", "full outer join", "group by", "having", "in", "index",
-        "inner join", "insert into", "insert into select", "is null", "is not null", "join", "left join",
-        "like", "limit", "not", "not null", "or", "order by", "outer join", "primary key", "procedure",
-        "right join", "rownum", "select", "select distinct", "select into", "select top", "set", "table",
-        "top", "truncate table", "union", "union all", "unique", "update", "values", "view", "where", "version"
+        "add", "add constraint", "alter", "alter column", "alter table", "backup database", "between", "case", "check",
+        "column", "constraint", "create", "create database", "create index", "create or replace view", "create table",
+        "create procedure", "create unique index", "create view", "database", "default", "delete", "desc", "distinct",
+        "drop", "drop column", "drop constraint", "drop database", "drop default", "drop index", "drop table",
+        "drop view", "exec", "exists", "foreign key", "from", "full outer join", "group by", "having", "index",
+        "inner join", "insert into", "insert into select", "is null", "is not null", "join", "left join", "like",
+        "limit", "not null", "order by", "outer join", "primary key", "procedure", "right join", "rownum", "select",
+        "select distinct", "select into", "select top", "table", "truncate table", "union", "union all", "unique",
+        "update", "values", "view", "where", "version"
     ]
     link = link.lower()
     for sql in sql_words:
